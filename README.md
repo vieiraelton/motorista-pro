@@ -1,2 +1,2 @@
 # motorista-pro
-Aplicativo para controle financeiro 
+app para motoristas
