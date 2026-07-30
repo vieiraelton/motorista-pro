@@ -12,6 +12,7 @@
     <link rel="shortcut icon" href="icons/icon-192.png" type="image/x-icon">
     <title>Motorista Pro EV</title>
     <style>
+        /* ===== RESET E ESTILOS GLOBAIS ===== */
         * {
             margin: 0;
             padding: 0;
@@ -179,7 +180,7 @@
             100% { transform: translateY(-120px) translateX(40px) scale(1.2); opacity: 0; }
         }
 
-        /* ===== RESTANTE DO APP ===== */
+        /* ===== VARIÁVEIS E TEMAS ===== */
         :root {
             --bg-primary: #f0f7f4;
             --bg-card: #ffffff;
@@ -265,6 +266,7 @@
             flex: 1;
         }
 
+        /* ===== HEADER ===== */
         .app-header {
             padding: 16px 0 12px;
             text-align: center;
@@ -275,9 +277,6 @@
             justify-content: center;
             gap: 12px;
             flex-wrap: wrap;
-        }
-        .app-logo-wrap img {
-            display: none;
         }
         .app-logo-wrap h1 {
             font-size: var(--font-xl);
@@ -299,12 +298,8 @@
             margin-left: 6px;
             vertical-align: middle;
         }
-        .app-subtitle {
-            color: var(--text-secondary);
-            font-size: var(--font-sm);
-            margin-top: 4px;
-        }
 
+        /* ===== INSTALL BANNER ===== */
         .install-banner {
             background: var(--btn-primary-gradient);
             color: white;
@@ -342,6 +337,7 @@
             transform: scale(1.02);
         }
 
+        /* ===== WEEK HEADER ===== */
         .week-header {
             background: var(--bg-card);
             border-radius: var(--radius-lg);
@@ -420,6 +416,7 @@
             50% { box-shadow: 0 0 0 10px rgba(239,68,68,0); }
         }
 
+        /* ===== SUMMARY CARDS ===== */
         .summary-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -523,6 +520,7 @@
         .summary-card:nth-child(3)::before { background: #10b981; }
         .summary-card:nth-child(4)::before { background: #8b5cf6; }
 
+        /* ===== TABS ===== */
         .tabs-container { margin-bottom: 16px; }
         .tabs {
             display: flex;
@@ -580,6 +578,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* ===== EXPENSE PAGE ===== */
         .expense-page { display: flex; flex-direction: column; gap: 16px; }
         .expense-page .expenses-card {
             background: var(--bg-card);
@@ -596,29 +595,80 @@
             align-items: center;
             gap: 8px;
         }
-        .expense-page .expense-list {
-            max-height: 350px;
-            overflow-y: auto;
-            margin-bottom: 14px;
-            padding-right: 4px;
-        }
-        .expense-page .expense-list::-webkit-scrollbar { width: 6px; }
-        .expense-page .expense-list::-webkit-scrollbar-track { background: var(--border-color); border-radius: 10px; }
-        .expense-page .expense-list::-webkit-scrollbar-thumb { background: var(--btn-primary); border-radius: 10px; }
 
-        .expense-item {
-            display: flex;
-            flex-direction: column;
-            padding: 14px 16px;
-            margin-bottom: 8px;
-            background: var(--hover-bg);
+        /* ===== ACORDEÃO PRINCIPAL (LISTA) ===== */
+        .expense-list-wrapper {
+            margin-bottom: 16px;
+            border: 1px solid var(--border-light);
             border-radius: var(--radius-sm);
-            gap: 8px;
+            overflow: hidden;
+        }
+        .expense-list-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--hover-bg);
+            cursor: pointer;
+            transition: background 0.2s;
+            font-weight: 600;
+            font-size: var(--font-md);
+            color: var(--text-primary);
+            user-select: none;
+        }
+        .expense-list-header:hover {
+            background: var(--border-color);
+        }
+        .expense-list-header .arrow {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            color: var(--text-muted);
+        }
+        .expense-list-header.expanded .arrow {
+            transform: rotate(180deg);
+        }
+        .expense-list-body {
+            display: none;
+            padding: 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .expense-list-body.open {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .expense-list-body::-webkit-scrollbar { width: 6px; }
+        .expense-list-body::-webkit-scrollbar-track { background: var(--border-color); border-radius: 10px; }
+        .expense-list-body::-webkit-scrollbar-thumb { background: var(--btn-primary); border-radius: 10px; }
+
+        /* ===== SUB-ACORDEÃO (CADA DESPESA) ===== */
+        .expense-item {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-light);
             transition: all 0.2s ease;
             border-left: 5px solid var(--btn-primary);
         }
-        .expense-item .expense-info { flex: 1; }
-        .expense-item .expense-name {
+        .expense-item:last-child {
+            border-bottom: none;
+        }
+        .expense-item .expense-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            cursor: pointer;
+            gap: 8px;
+            transition: background 0.2s;
+            background: var(--hover-bg);
+        }
+        .expense-item .expense-header:hover {
+            background: var(--border-color);
+        }
+        .expense-item .expense-header .expense-name {
             font-weight: 600;
             color: var(--text-primary);
             font-size: var(--font-md);
@@ -626,49 +676,53 @@
             align-items: center;
             gap: 8px;
             flex-wrap: wrap;
+            flex: 1;
         }
-        .expense-item .expense-name .cat-badge {
-            font-size: 11px;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-weight: 600;
-            background: var(--border-color);
-            color: var(--text-secondary);
-        }
-        .expense-item .expense-name .cat-badge.aluguel { background: #f59e0b20; color: #f59e0b; }
-        .expense-item .expense-name .cat-badge.carregamento { background: #3b82f620; color: #3b82f6; }
-        .expense-item .expense-name .cat-badge.lavagem { background: #8b5cf620; color: #8b5cf6; }
-        .expense-item .expense-name .cat-badge.outros { background: #6b728020; color: #6b7280; }
-        .expense-item .expense-name .cat-badge.aluguel-ap { background: #ef444420; color: #ef4444; }
-        .expense-item .expense-name .cat-badge.condominio { background: #f9731620; color: #f97316; }
-        .expense-item .expense-name .cat-badge.luz { background: #eab30820; color: #eab308; }
-        .expense-item .expense-name .cat-badge.internet { background: #06b6d420; color: #06b6d4; }
-        .expense-item .expense-name .cat-badge.mercado { background: #22c55e20; color: #22c55e; }
-        .expense-item .expense-name .cat-badge.pensao { background: #ec489920; color: #ec4899; }
-        .expense-item .expense-name .cat-badge.pessoal-outros { background: #6b728020; color: #6b7280; }
-        .expense-item .expense-date {
-            font-size: var(--font-xs);
-            color: var(--text-muted);
-        }
-        .expense-item .expense-value {
+        .expense-item .expense-header .expense-value {
             font-weight: 700;
             color: #ef4444;
             font-size: var(--font-lg);
-            min-width: 100px;
+            white-space: nowrap;
         }
-        .expense-item .expense-row {
+        .expense-item .expense-header .arrow {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            color: var(--text-muted);
+            flex-shrink: 0;
+            margin-left: 4px;
+        }
+        .expense-item.expanded .expense-header .arrow {
+            transform: rotate(180deg);
+        }
+        .expense-item .expense-body {
+            display: none;
+            padding: 0 16px 16px 16px;
+            border-top: 1px solid var(--border-light);
+            padding-top: 12px;
+            background: var(--bg-card);
+        }
+        .expense-item.expanded .expense-body {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        .expense-item .expense-body .expense-date {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        .expense-item .expense-body .expense-row {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             gap: 10px;
+            margin-top: 6px;
         }
-        .expense-item .expense-row .expense-info { flex: 1; min-width: 120px; }
-        .expense-item .expense-row .expense-actions {
+        .expense-item .expense-body .expense-row .expense-actions {
             display: flex;
             gap: 6px;
             flex-shrink: 0;
         }
-        .expense-item .expense-row .expense-actions button {
+        .expense-item .expense-body .expense-row .expense-actions button {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 1.5rem;
@@ -679,11 +733,11 @@
             transition: all 0.2s;
             min-height: 40px;
         }
-        .expense-item .expense-row .expense-actions button:hover {
+        .expense-item .expense-body .expense-row .expense-actions button:hover {
             background: var(--btn-primary);
             color: white;
         }
-        .status-select {
+        .expense-item .expense-body .status-select {
             font-size: var(--font-sm);
             padding: 6px 12px;
             border-radius: 2rem;
@@ -695,11 +749,11 @@
             min-width: 100px;
             min-height: 44px;
         }
-        .status-select:focus {
+        .expense-item .expense-body .status-select:focus {
             outline: none;
             border-color: var(--btn-primary);
         }
-        .receipt-badge {
+        .expense-item .expense-body .receipt-badge {
             font-size: var(--font-xs);
             background: var(--btn-info);
             color: white;
@@ -708,8 +762,30 @@
             cursor: pointer;
             transition: all 0.2s;
             font-weight: 500;
+            display: inline-block;
+            margin-right: 6px;
         }
-        .receipt-badge.has-receipt { background: var(--btn-success); }
+        .expense-item .expense-body .receipt-badge.has-receipt { background: var(--btn-success); }
+        .expense-item .cat-badge {
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            background: var(--border-color);
+            color: var(--text-secondary);
+        }
+        .expense-item .cat-badge.aluguel { background: #f59e0b20; color: #f59e0b; }
+        .expense-item .cat-badge.carregamento { background: #3b82f620; color: #3b82f6; }
+        .expense-item .cat-badge.lavagem { background: #8b5cf620; color: #8b5cf6; }
+        .expense-item .cat-badge.outros { background: #6b728020; color: #6b7280; }
+        .expense-item .cat-badge.aluguel-ap { background: #ef444420; color: #ef4444; }
+        .expense-item .cat-badge.condominio { background: #f9731620; color: #f97316; }
+        .expense-item .cat-badge.luz { background: #eab30820; color: #eab308; }
+        .expense-item .cat-badge.internet { background: #06b6d420; color: #06b6d4; }
+        .expense-item .cat-badge.mercado { background: #22c55e20; color: #22c55e; }
+        .expense-item .cat-badge.pensao { background: #ec489920; color: #ec4899; }
+        .expense-item .cat-badge.pessoal-outros { background: #6b728020; color: #6b7280; }
+
         .empty-msg {
             text-align: center;
             padding: 20px;
@@ -718,12 +794,14 @@
             font-size: var(--font-md);
         }
 
+        /* ===== FORMULÁRIO ===== */
         .add-form {
             display: flex;
             flex-direction: column;
             gap: 12px;
             border-top: 1px solid var(--border-light);
             padding-top: 14px;
+            margin-top: 4px;
         }
         .form-row {
             display: flex;
@@ -809,32 +887,7 @@
             box-shadow: 0 6px 20px rgba(43,156,124,0.3);
         }
 
-        .summary-page { display: flex; flex-direction: column; gap: 16px; }
-        .summary-page .daily-card,
-        .summary-page .stats-card,
-        .summary-page .chart-card,
-        .summary-page .monthly-card,
-        .summary-page .balance-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 18px 16px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border-light);
-        }
-        .summary-page .daily-card h3,
-        .summary-page .stats-card h3,
-        .summary-page .chart-card h3,
-        .summary-page .monthly-card h3,
-        .summary-page .balance-card h3 {
-            font-size: var(--font-lg);
-            margin-bottom: 14px;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* ===== ABA FATURAMENTO ===== */
+        /* ===== FATURAMENTO ===== */
         .faturamento-page { display: flex; flex-direction: column; gap: 16px; }
         .faturamento-page .daily-card,
         .faturamento-page .stats-card {
@@ -940,16 +993,6 @@
             pointer-events: none;
             z-index: 1;
         }
-        .km-suffix {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: var(--font-xs);
-            color: var(--text-muted);
-            font-weight: 600;
-            pointer-events: none;
-        }
         .viagens-prefix {
             position: absolute;
             left: 8px;
@@ -989,6 +1032,7 @@
             border-left-color: #f59e0b;
         }
 
+        /* ===== STATS ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1025,7 +1069,58 @@
             50% { box-shadow: 0 0 0 12px rgba(43,156,124,0); }
         }
 
-        /* ===== CARD DE SALDO ===== */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+        .action-buttons button {
+            padding: 10px 20px;
+            border-radius: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: var(--font-sm);
+            transition: all 0.25s ease;
+            min-height: 48px;
+        }
+        .action-buttons button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+        }
+        .btn-danger { background: var(--btn-danger); color: white; }
+        .btn-secondary { background: var(--btn-secondary); color: white; }
+        .btn-info { background: var(--btn-info); color: white; }
+        .btn-success { background: var(--btn-success); color: white; }
+
+        /* ===== RESUMO ===== */
+        .summary-page { display: flex; flex-direction: column; gap: 16px; }
+        .summary-page .daily-card,
+        .summary-page .stats-card,
+        .summary-page .chart-card,
+        .summary-page .monthly-card,
+        .summary-page .balance-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 18px 16px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-light);
+        }
+        .summary-page .daily-card h3,
+        .summary-page .stats-card h3,
+        .summary-page .chart-card h3,
+        .summary-page .monthly-card h3,
+        .summary-page .balance-card h3 {
+            font-size: var(--font-lg);
+            margin-bottom: 14px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .balance-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -1053,7 +1148,6 @@
         .balance-item .balance-value.positive { color: #10b981; }
         .balance-item .balance-value.negative { color: #ef4444; }
         .balance-item .balance-value.neutral { color: var(--text-muted); }
-
         .balance-item.highlight-card {
             background: var(--btn-primary-gradient);
             border-color: var(--btn-primary);
@@ -1094,37 +1188,6 @@
             color: white;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 12px;
-        }
-        .action-buttons button {
-            padding: 10px 20px;
-            border-radius: 2rem;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            font-size: var(--font-sm);
-            transition: all 0.25s ease;
-            min-height: 48px;
-        }
-        .action-buttons button:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.05);
-        }
-        .btn-danger { background: var(--btn-danger); color: white; }
-        .btn-secondary { background: var(--btn-secondary); color: white; }
-        .btn-info { background: var(--btn-info); color: white; }
-        .btn-success { background: var(--btn-success); color: white; }
-
-        .chart-container { margin-bottom: 14px; }
-        .chart-container:last-child { margin-bottom: 0; }
-        canvas { max-height: 220px; width: 100%; border-radius: var(--radius-sm); }
-
-        /* ===== CARDS MENSAIS ===== */
         .monthly-controls {
             display: flex;
             align-items: center;
@@ -1217,6 +1280,11 @@
             grid-column: 1 / -1;
         }
 
+        .chart-container { margin-bottom: 14px; }
+        .chart-container:last-child { margin-bottom: 0; }
+        canvas { max-height: 220px; width: 100%; border-radius: var(--radius-sm); }
+
+        /* ===== MODAIS ===== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -1409,6 +1477,7 @@
             min-height: var(--touch-size);
         }
         .flex-buttons button:hover { transform: translateY(-2px); }
+
         .offline-badge {
             position: fixed;
             bottom: 16px;
@@ -1431,7 +1500,7 @@
             border-top: 1px solid var(--border-color);
         }
 
-        /* ===== TAMANHOS DE FONTE AMPLIADOS PARA SMARTPHONES ===== */
+        /* ===== RESPONSIVIDADE ===== */
         @media (max-width: 768px) {
             :root {
                 --font-xs: 16px;
@@ -1449,8 +1518,9 @@
             .summary-card .value { font-size: var(--font-xl); }
             .summary-card .label { font-size: var(--font-xs); }
             .tab-btn { font-size: var(--font-md); padding: 12px 6px; min-height: 50px; }
-            .expense-item .expense-row { flex-direction: column; align-items: stretch; }
-            .expense-item .expense-row .expense-info { min-width: unset; }
+            .expense-item .expense-header .expense-name { font-size: var(--font-md); }
+            .expense-item .expense-header .expense-value { font-size: var(--font-lg); }
+            .expense-item .expense-body .expense-row { flex-direction: column; align-items: stretch; }
             .daily-inputs { flex-direction: row; }
             .stats-grid { gap: 8px; }
             .modal-content { padding: 20px; }
@@ -1458,8 +1528,6 @@
             .header-controls button { font-size: var(--font-sm); padding: 8px 14px; min-height: 46px; }
             .week-title h2 { font-size: var(--font-md); }
             .week-nav button { font-size: var(--font-md); padding: 8px 14px; min-height: 46px; min-width: 44px; }
-            .expense-item .expense-name { font-size: var(--font-md); }
-            .expense-item .expense-value { font-size: var(--font-lg); }
             .status-select { font-size: var(--font-sm); min-height: 44px; min-width: 90px; padding: 6px 10px; }
             .add-form input, .add-form select { font-size: var(--font-md); min-height: 50px; padding: 12px 16px; }
             .btn-add { font-size: var(--font-md); min-height: 50px; padding: 12px 20px; }
@@ -1484,7 +1552,7 @@
             .form-label { font-size: var(--font-sm); }
             .splash-subtitle { font-size: 1.2rem; }
             .splash-status { font-size: 0.9rem; }
-            .expense-item .expense-actions button { font-size: var(--font-md); min-height: 44px; padding: 8px 16px; }
+            .expense-item .expense-body .expense-row .expense-actions button { font-size: var(--font-md); min-height: 44px; padding: 8px 16px; }
             .receipt-badge { font-size: var(--font-sm); }
             .daily-item label { font-size: var(--font-md); }
             .validation-warning { font-size: var(--font-md); padding: 14px 18px; }
@@ -1526,8 +1594,9 @@
             .summary-card .label { font-size: var(--font-xs); }
             .tab-btn { font-size: var(--font-sm); padding: 10px 4px; min-height: 46px; }
             .tab-btn .tab-badge { display: none; }
-            .expense-item .expense-row { flex-direction: column; align-items: stretch; }
-            .expense-item .expense-row .expense-info { min-width: unset; }
+            .expense-item .expense-header .expense-name { font-size: var(--font-sm); }
+            .expense-item .expense-header .expense-value { font-size: var(--font-md); }
+            .expense-item .expense-body .expense-row { flex-direction: column; align-items: stretch; }
             .daily-inputs { flex-direction: row; }
             .stats-grid { gap: 6px; }
             .modal-content { padding: 18px; }
@@ -1535,8 +1604,6 @@
             .header-controls button { font-size: var(--font-xs); padding: 6px 12px; min-height: 42px; }
             .week-title h2 { font-size: var(--font-sm); }
             .week-nav button { font-size: var(--font-sm); padding: 6px 12px; min-height: 42px; min-width: 38px; }
-            .expense-item .expense-name { font-size: var(--font-sm); }
-            .expense-item .expense-value { font-size: var(--font-md); }
             .status-select { font-size: var(--font-xs); min-height: 40px; min-width: 80px; padding: 4px 8px; }
             .add-form input, .add-form select { font-size: var(--font-sm); min-height: 46px; padding: 10px 14px; }
             .btn-add { font-size: var(--font-sm); min-height: 46px; padding: 10px 18px; }
@@ -1561,7 +1628,7 @@
             .form-label { font-size: var(--font-xs); }
             .splash-subtitle { font-size: 1rem; }
             .splash-status { font-size: 0.8rem; }
-            .expense-item .expense-actions button { font-size: var(--font-sm); min-height: 38px; padding: 6px 12px; }
+            .expense-item .expense-body .expense-row .expense-actions button { font-size: var(--font-sm); min-height: 38px; padding: 6px 12px; }
             .daily-item label { font-size: var(--font-sm); }
             .validation-warning { font-size: var(--font-sm); padding: 12px 16px; }
             .empty-msg { font-size: var(--font-sm); }
@@ -1605,8 +1672,8 @@
             .week-nav button { font-size: 12px; padding: 4px 8px; min-height: 38px; min-width: 34px; }
             .tab-btn { font-size: var(--font-xs); padding: 8px 2px; min-height: 40px; }
             .expense-item { padding: 10px 12px; }
-            .expense-item .expense-name { font-size: var(--font-xs); }
-            .expense-item .expense-value { font-size: var(--font-sm); }
+            .expense-item .expense-header .expense-name { font-size: var(--font-xs); }
+            .expense-item .expense-header .expense-value { font-size: var(--font-sm); }
             .daily-inputs .input-wrapper input { font-size: var(--font-xs); min-height: 40px; }
             .add-form input, .add-form select { font-size: var(--font-xs); min-height: 40px; padding: 8px 12px; }
             .btn-add { font-size: var(--font-xs); min-height: 40px; padding: 8px 14px; }
@@ -1629,7 +1696,7 @@
         @media (min-width: 769px) {
             .container { padding: 0 1.5rem 5rem; }
             .summary-grid { grid-template-columns: repeat(4, 1fr); }
-            .expense-item .expense-row { flex-wrap: nowrap; }
+            .expense-item .expense-body .expense-row { flex-wrap: nowrap; }
             .modal-content .install-platforms { grid-template-columns: 1fr 1fr; }
             .form-row { flex-direction: row; align-items: center; }
             .form-label { display: none; }
@@ -1663,7 +1730,7 @@
 <div class="container" id="mainApp" style="display: none;">
     <header class="app-header">
         <div class="app-logo-wrap">
-            <h1>Motorista Pro EV<span class="ev-chip">⚡ ELÉTRICO</span></h1>
+            <h1>Motorista Pro EV</h1>
         </div>
     </header>
 
@@ -1738,7 +1805,15 @@
         <div class="expense-page">
             <div class="expenses-card">
                 <h3>🚙 Despesas do Carro</h3>
-                <div class="expense-list" id="carExpensesList"></div>
+                <div class="expense-list-wrapper">
+                    <div class="expense-list-header" id="carListHeader">
+                        <span>📋 Lista de despesas <span id="carCountBadge">(0)</span></span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="expense-list-body" id="carListBody">
+                        <div id="carExpensesList"></div>
+                    </div>
+                </div>
                 <div class="add-form">
                     <div class="form-row">
                         <select id="carExpenseCategory" style="flex:1.5;">
@@ -1773,7 +1848,15 @@
         <div class="expense-page">
             <div class="expenses-card">
                 <h3>👱‍♂️ Despesas Pessoais</h3>
-                <div class="expense-list" id="personalExpensesList"></div>
+                <div class="expense-list-wrapper">
+                    <div class="expense-list-header" id="personalListHeader">
+                        <span>📋 Lista de despesas <span id="personalCountBadge">(0)</span></span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="expense-list-body" id="personalListBody">
+                        <div id="personalExpensesList"></div>
+                    </div>
+                </div>
                 <div class="add-form">
                     <div class="form-row">
                         <select id="personalExpenseCategory" style="flex:1.5;">
@@ -1899,6 +1982,7 @@
             <div class="chart-card">
                 <h3>📈 Gráficos de Desempenho</h3>
                 <div class="chart-container"><canvas id="weeklyChart"></canvas></div>
+                <div class="chart-container"><canvas id="monthlyChart"></canvas></div>
                 <div class="chart-container"><canvas id="expenseChart"></canvas></div>
             </div>
         </div>
@@ -1909,13 +1993,11 @@
 
 <div class="offline-badge" id="offlineBadge" style="display:none;">📡 Modo Offline</div>
 
-<!-- Modal: Instalação -->
+<!-- ===== MODAIS ===== -->
 <div class="modal-overlay" id="installModal">
     <div class="modal-content">
         <h3>📲 Baixar Motorista Pro EV</h3>
-        <p style="text-align:center;color:var(--text-secondary);margin-bottom:12px;">
-            Instale como um aplicativo nativo no seu celular!
-        </p>
+        <p style="text-align:center;color:var(--text-secondary);margin-bottom:12px;">Instale como um aplicativo nativo no seu celular!</p>
         <div class="install-platforms">
             <div class="install-platform">
                 <div class="platform-icon">🤖</div>
@@ -1946,7 +2028,6 @@
     </div>
 </div>
 
-<!-- Modal: Ajuda -->
 <div class="modal-overlay" id="helpModal">
     <div class="modal-content">
         <h3>🎓 Como usar</h3>
@@ -1962,7 +2043,6 @@
     </div>
 </div>
 
-<!-- Modal: Backup -->
 <div class="modal-overlay" id="backupModal">
     <div class="modal-content">
         <h3>☁️ Backup</h3>
@@ -1980,7 +2060,6 @@
     </div>
 </div>
 
-<!-- Modal: Lembretes -->
 <div class="modal-overlay" id="reminderModal">
     <div class="modal-content">
         <h3>🔔 Contas Pendentes</h3>
@@ -1989,7 +2068,6 @@
     </div>
 </div>
 
-<!-- Modal: Comprovante -->
 <div class="modal-overlay" id="receiptModal">
     <div class="modal-content">
         <h3>📎 Comprovante</h3>
@@ -2006,15 +2084,195 @@
 
 <script>
     // ==================== CÓDIGO PRINCIPAL ====================
+    
+    // FUNÇÕES GLOBAIS - DEFINIDAS ANTES DE TUDO
+    window.toggleExpense = function(id) {
+        try {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.toggle('expanded');
+            } else {
+                console.warn('Elemento não encontrado:', id);
+            }
+        } catch (e) {
+            console.error('Erro em toggleExpense:', e);
+        }
+    };
+
+    window.toggleMainList = function(bodyId, headerEl) {
+        try {
+            const body = document.getElementById(bodyId);
+            if (body) {
+                body.classList.toggle('open');
+            } else {
+                console.warn('Corpo da lista não encontrado:', bodyId);
+            }
+            if (headerEl) {
+                headerEl.classList.toggle('expanded');
+            }
+        } catch (e) {
+            console.error('Erro em toggleMainList:', e);
+        }
+    };
+
+    window.alterarStatus = function(tipo, idx, novo) {
+        try {
+            let sem = getCurrentWeekData();
+            let arr = tipo === 'carro' ? sem.carro : sem.pessoal;
+            if (arr && arr[idx]) { 
+                arr[idx].status = novo; 
+                salvar(); 
+                atualizarTudo(); 
+                toast('Status alterado!'); 
+            }
+        } catch (e) {
+            console.error('Erro em alterarStatus:', e);
+        }
+    };
+
+    window.excluirDespesa = function(tipo, idx) {
+        try {
+            if (confirm('Excluir?')) {
+                let sem = getCurrentWeekData();
+                if (tipo === 'carro') sem.carro.splice(idx, 1);
+                else sem.pessoal.splice(idx, 1);
+                salvar(); 
+                atualizarTudo(); 
+                toast('Despesa excluída');
+            }
+        } catch (e) {
+            console.error('Erro em excluirDespesa:', e);
+        }
+    };
+
+    window.editarDespesa = function(tipo, idx) {
+        try {
+            let sem = getCurrentWeekData();
+            let arr = tipo === 'carro' ? sem.carro : sem.pessoal;
+            let item = arr[idx];
+            if (!item) return;
+            
+            if (tipo === 'carro') {
+                let novaCategoria = prompt('Categoria (Aluguel, Carregamento, Lavagem, Outros):', item.categoria || 'Outros');
+                if (!novaCategoria) return;
+                let novoValor = parseFloat(prompt('Valor (R$):', item.valor));
+                if (isNaN(novoValor)) return;
+                let novaData = prompt('Data (AAAA-MM-DD):', item.dataVenc || '');
+                if (novaData && !parseDateFromInput(novaData)) {
+                    alert('Data inválida! Use o formato AAAA-MM-DD.');
+                    return;
+                }
+                if (novaData && parseDateFromInput(novaData)) {
+                    const oldWeekKey = getWeekKey(currentWeek);
+                    const newWeekKey = getWeekKeyFromDate(novaData);
+                    if (newWeekKey !== oldWeekKey) {
+                        const itemRemovido = arr.splice(idx, 1)[0];
+                        itemRemovido.dataVenc = novaData;
+                        if (!store.semanas[newWeekKey]) {
+                            store.semanas[newWeekKey] = { carro:[], pessoal:[], receitas:[0,0,0,0,0,0,0], kms:[0,0,0,0,0,0,0], viagens:[0,0,0,0,0,0,0], meta:null };
+                        }
+                        store.semanas[newWeekKey].carro.push(itemRemovido);
+                        salvar();
+                        atualizarTudo();
+                        toast(`Despesa movida para semana ${newWeekKey}`);
+                        return;
+                    }
+                    item.dataVenc = novaData;
+                }
+                let novaDesc = '';
+                if (novaCategoria === 'Outros') {
+                    novaDesc = prompt('Descrição do gasto:', item.descricao || '');
+                    if (novaDesc === null) return;
+                    item.nome = `Outros: ${novaDesc}`;
+                    item.descricao = novaDesc;
+                } else { 
+                    item.nome = novaCategoria; 
+                    item.descricao = ''; 
+                }
+                item.categoria = novaCategoria;
+                item.valor = novoValor;
+            } else {
+                let novasCategorias = ['Aluguel AP', 'Condomínio', 'Luz', 'Internet', 'Mercado', 'Pensão', 'Outros'];
+                let novaCategoria = prompt('Categoria:', item.categoria || 'Outros');
+                if (!novaCategoria || !novasCategorias.includes(novaCategoria)) return;
+                let novoValor = parseFloat(prompt('Valor (R$):', item.valor));
+                if (isNaN(novoValor)) return;
+                let novaData = prompt('Data (AAAA-MM-DD):', item.dataVenc || '');
+                if (novaData && !parseDateFromInput(novaData)) {
+                    alert('Data inválida! Use o formato AAAA-MM-DD.');
+                    return;
+                }
+                if (novaData && parseDateFromInput(novaData)) {
+                    const oldWeekKey = getWeekKey(currentWeek);
+                    const newWeekKey = getWeekKeyFromDate(novaData);
+                    if (newWeekKey !== oldWeekKey) {
+                        const itemRemovido = arr.splice(idx, 1)[0];
+                        itemRemovido.dataVenc = novaData;
+                        if (!store.semanas[newWeekKey]) {
+                            store.semanas[newWeekKey] = { carro:[], pessoal:[], receitas:[0,0,0,0,0,0,0], kms:[0,0,0,0,0,0,0], viagens:[0,0,0,0,0,0,0], meta:null };
+                        }
+                        store.semanas[newWeekKey].pessoal.push(itemRemovido);
+                        salvar();
+                        atualizarTudo();
+                        toast(`Despesa movida para semana ${newWeekKey}`);
+                        return;
+                    }
+                    item.dataVenc = novaData;
+                }
+                let novaDesc = '';
+                if (novaCategoria === 'Outros') {
+                    novaDesc = prompt('Descrição do gasto:', item.descricao || '');
+                    if (novaDesc === null) return;
+                    item.nome = `Outros: ${novaDesc}`;
+                    item.descricao = novaDesc;
+                } else { 
+                    item.nome = novaCategoria; 
+                    item.descricao = ''; 
+                }
+                item.categoria = novaCategoria;
+                item.valor = novoValor;
+            }
+            salvar(); 
+            atualizarStatusContas(); 
+            atualizarTudo(); 
+            toast('Atualizada!');
+        } catch (e) {
+            console.error('Erro em editarDespesa:', e);
+        }
+    };
+
+    window.abrirReceitaModal = function(tipo, idx) {
+        try {
+            currentReceiptData = { type: tipo, index: idx };
+            let sem = getCurrentWeekData();
+            let arr = tipo === 'carro' ? sem.carro : sem.pessoal;
+            let exp = arr[idx];
+            if (!exp) return;
+            const infoEl = document.getElementById('receiptInfo');
+            if (infoEl) infoEl.innerHTML = `<strong>${escapeHtml(exp.nome || exp.categoria || 'Despesa')}</strong><br>Valor: R$ ${exp.valor.toFixed(2)}`;
+            let preview = document.getElementById('receiptPreview');
+            if (preview) {
+                if (exp.receipt) preview.innerHTML = `<img src="${exp.receipt}" style="max-width:100%;border-radius:12px;"><br><small>Clique em Remover</small>`;
+                else preview.innerHTML = '<small>Nenhum comprovante anexado</small>';
+            }
+            openModal('receiptModal');
+        } catch (e) {
+            console.error('Erro em abrirReceitaModal:', e);
+        }
+    };
+
+    // ===== VARIÁVEIS GLOBAIS =====
     let deferredPrompt = null;
     let store = { semanas: {}, tema: 'light' };
     let currentWeek = getMondayOfWeek(getCurrentDateSP());
-    let weeklyChart, expenseChart;
+    let weeklyChart, monthlyChart, expenseChart;
     let currentReceiptData = null;
     let currentMonth = new Date();
     currentMonth.setDate(1);
     let despesasVisivel = false;
+    let dadosFaturamentoAlterados = false;
 
+    // ===== EVENTOS =====
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
@@ -2022,21 +2280,22 @@
         if (banner) banner.classList.add('show');
     });
 
-    function installPWA() {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    document.getElementById('installBanner').classList.remove('show');
-                }
-                deferredPrompt = null;
-            });
-        } else {
-            openModal('installModal');
+    window.addEventListener('beforeunload', function (e) {
+        if (dadosFaturamentoAlterados) {
+            e.preventDefault();
+            e.returnValue = 'Existem dados de faturamento não salvos. Deseja realmente sair?';
+            return e.returnValue;
         }
+    });
+
+    // ===== FUNÇÕES AUXILIARES =====
+    function marcarFaturamentoAlterado() {
+        dadosFaturamentoAlterados = true;
     }
 
-    document.getElementById('installPwaBtn')?.addEventListener('click', installPWA);
+    function resetarFlagFaturamento() {
+        dadosFaturamentoAlterados = false;
+    }
 
     function getCurrentDateSPString() {
         const now = new Date();
@@ -2045,19 +2304,23 @@
         const sp = new Date(utc + (offset * 3600000));
         return `${sp.getUTCFullYear()}-${String(sp.getUTCMonth()+1).padStart(2,'0')}-${String(sp.getUTCDate()).padStart(2,'0')}`;
     }
+
     function getCurrentDateSP() {
         const [y,m,d] = getCurrentDateSPString().split('-').map(Number);
         return new Date(y, m-1, d);
     }
+
     function parseDateFromInput(str) {
         if(!str) return null;
         const [y,m,d]=str.split('-');
         return new Date(parseInt(y), parseInt(m)-1, parseInt(d), 12, 0, 0);
     }
+
     function formatDateToInput(d) {
         if (!d) return '';
         return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     }
+
     function getMondayOfWeek(data) {
         const d = new Date(data);
         const dia = d.getDay();
@@ -2067,14 +2330,13 @@
         segunda.setHours(12, 0, 0);
         return segunda;
     }
+
     function getWeekKey(data) { return formatDateToInput(data); }
+
     const DIAS = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
     const REVENUE_IDS = ['rev0','rev1','rev2','rev3','rev4','rev5','rev6'];
     const KM_IDS = ['km0','km1','km2','km3','km4','km5','km6'];
     const VIAGENS_IDS = ['viag0','viag1','viag2','viag3','viag4','viag5','viag6'];
-
-    const CARRO_CATEGORIAS = ['Aluguel', 'Carregamento', 'Lavagem', 'Outros'];
-    const PESSOAL_CATEGORIAS = ['Aluguel AP', 'Condomínio', 'Luz', 'Internet', 'Mercado', 'Pensão', 'Outros'];
 
     function toast(msg, erro=false) {
         const el = document.createElement('div');
@@ -2083,55 +2345,62 @@
         document.body.appendChild(el);
         setTimeout(() => el.remove(), 3500);
     }
+
     function salvar() { 
         try {
             localStorage.setItem("motoristaProSP", JSON.stringify(store)); 
+            resetarFlagFaturamento();
         } catch(e) {
             console.error('Erro ao salvar:', e);
+            toast('Erro ao salvar dados!', true);
         }
     }
 
     function carregar() {
-        const saved = localStorage.getItem("motoristaProSP");
-        if (saved) {
-            try {
-                store = JSON.parse(saved);
-                if (!store.semanas) store.semanas = {};
-                if (!store.tema) store.tema = 'light';
-                for (let k in store.semanas) {
-                    if (!store.semanas[k].receitas) store.semanas[k].receitas = [0,0,0,0,0,0,0];
-                    if (!store.semanas[k].kms) store.semanas[k].kms = [0,0,0,0,0,0,0];
-                    if (!store.semanas[k].viagens) store.semanas[k].viagens = [0,0,0,0,0,0,0];
-                    if (!store.semanas[k].carro) store.semanas[k].carro = [];
-                    if (!store.semanas[k].pessoal) store.semanas[k].pessoal = [];
-                    
-                    if (store.semanas[k].carro) {
-                        store.semanas[k].carro.forEach(e => {
-                            if (e.dataVenc && typeof e.dataVenc === 'object') {
-                                e.dataVenc = formatDateToInput(e.dataVenc);
-                            }
-                            if (!e.status) e.status = 'pending';
-                        });
+        try {
+            const saved = localStorage.getItem("motoristaProSP");
+            if (saved) {
+                try {
+                    store = JSON.parse(saved);
+                    if (!store.semanas) store.semanas = {};
+                    if (!store.tema) store.tema = 'light';
+                    for (let k in store.semanas) {
+                        if (!store.semanas[k].receitas) store.semanas[k].receitas = [0,0,0,0,0,0,0];
+                        if (!store.semanas[k].kms) store.semanas[k].kms = [0,0,0,0,0,0,0];
+                        if (!store.semanas[k].viagens) store.semanas[k].viagens = [0,0,0,0,0,0,0];
+                        if (!store.semanas[k].carro) store.semanas[k].carro = [];
+                        if (!store.semanas[k].pessoal) store.semanas[k].pessoal = [];
+                        
+                        if (store.semanas[k].carro) {
+                            store.semanas[k].carro.forEach(e => {
+                                if (e.dataVenc && typeof e.dataVenc === 'object') {
+                                    e.dataVenc = formatDateToInput(e.dataVenc);
+                                }
+                                if (!e.status) e.status = 'pending';
+                            });
+                        }
+                        if (store.semanas[k].pessoal) {
+                            store.semanas[k].pessoal.forEach(e => {
+                                if (e.dataVenc && typeof e.dataVenc === 'object') {
+                                    e.dataVenc = formatDateToInput(e.dataVenc);
+                                }
+                                if (!e.status) e.status = 'pending';
+                            });
+                        }
                     }
-                    if (store.semanas[k].pessoal) {
-                        store.semanas[k].pessoal.forEach(e => {
-                            if (e.dataVenc && typeof e.dataVenc === 'object') {
-                                e.dataVenc = formatDateToInput(e.dataVenc);
-                            }
-                            if (!e.status) e.status = 'pending';
-                        });
-                    }
+                } catch(e) {
+                    console.error('Erro ao carregar dados:', e);
+                    inicializarStorePadrao();
                 }
-            } catch(e) {
-                console.error('Erro ao carregar dados:', e);
+            } else {
                 inicializarStorePadrao();
             }
-        } else {
-            inicializarStorePadrao();
+            atualizarStatusContas();
+            aplicarTema(store.tema);
+            salvar();
+        } catch (e) {
+            console.error('Erro em carregar:', e);
         }
-        atualizarStatusContas();
-        aplicarTema(store.tema);
-        salvar();
     }
 
     function inicializarStorePadrao() {
@@ -2160,42 +2429,46 @@
     }
 
     function atualizarStatusContas() {
-        const hoje = getCurrentDateSP();
-        hoje.setHours(0,0,0,0);
-        for (let k in store.semanas) {
-            let sem = store.semanas[k];
-            if (sem.carro) {
-                sem.carro.forEach(e => {
-                    if (e.status !== 'paid' && e.dataVenc) {
-                        let v = parseDateFromInput(e.dataVenc);
-                        if (v) { 
-                            v.setHours(0,0,0,0); 
-                            if (v < hoje && e.status !== 'paid') {
-                                e.status = 'overdue';
-                            } else if (e.status === 'overdue' && v >= hoje) {
-                                e.status = 'pending';
+        try {
+            const hoje = getCurrentDateSP();
+            hoje.setHours(0,0,0,0);
+            for (let k in store.semanas) {
+                let sem = store.semanas[k];
+                if (sem.carro) {
+                    sem.carro.forEach(e => {
+                        if (e.status !== 'paid' && e.dataVenc) {
+                            let v = parseDateFromInput(e.dataVenc);
+                            if (v) { 
+                                v.setHours(0,0,0,0); 
+                                if (v < hoje && e.status !== 'paid') {
+                                    e.status = 'overdue';
+                                } else if (e.status === 'overdue' && v >= hoje) {
+                                    e.status = 'pending';
+                                }
                             }
                         }
-                    }
-                });
-            }
-            if (sem.pessoal) {
-                sem.pessoal.forEach(e => {
-                    if (e.status !== 'paid' && e.dataVenc) {
-                        let v = parseDateFromInput(e.dataVenc);
-                        if (v) { 
-                            v.setHours(0,0,0,0);
-                            if (v < hoje && e.status !== 'paid') {
-                                e.status = 'overdue';
-                            } else if (e.status === 'overdue' && v >= hoje) {
-                                e.status = 'pending';
+                    });
+                }
+                if (sem.pessoal) {
+                    sem.pessoal.forEach(e => {
+                        if (e.status !== 'paid' && e.dataVenc) {
+                            let v = parseDateFromInput(e.dataVenc);
+                            if (v) { 
+                                v.setHours(0,0,0,0);
+                                if (v < hoje && e.status !== 'paid') {
+                                    e.status = 'overdue';
+                                } else if (e.status === 'overdue' && v >= hoje) {
+                                    e.status = 'pending';
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
+            salvar();
+        } catch (e) {
+            console.error('Erro em atualizarStatusContas:', e);
         }
-        salvar();
     }
 
     function getCurrentWeekData() {
@@ -2213,38 +2486,43 @@
         return store.semanas[key];
     }
 
-    function getWeekDataByKey(weekKey) {
-        if (!store.semanas[weekKey]) {
-            store.semanas[weekKey] = { 
-                carro:[], 
-                pessoal:[], 
-                receitas:[0,0,0,0,0,0,0], 
-                kms:[0,0,0,0,0,0,0],
-                viagens:[0,0,0,0,0,0,0], 
-                meta:null 
-            };
-        }
-        return store.semanas[weekKey];
-    }
-
     function totalDespesas() {
         let s = getCurrentWeekData();
         return (s.carro || []).reduce((a,b) => a+b.valor, 0) + (s.pessoal || []).reduce((a,b) => a+b.valor, 0);
     }
+
     function totalCarro() { return (getCurrentWeekData().carro || []).reduce((a,b) => a+b.valor, 0); }
+
     function totalPessoal() { return (getCurrentWeekData().pessoal || []).reduce((a,b) => a+b.valor, 0); }
+
     function totalReceitas() { return (getCurrentWeekData().receitas || [0,0,0,0,0,0,0]).reduce((a,b) => a+b, 0); }
+
     function totalKms() { return (getCurrentWeekData().kms || [0,0,0,0,0,0,0]).reduce((a,b) => a+b, 0); }
+
     function totalViagens() { return (getCurrentWeekData().viagens || [0,0,0,0,0,0,0]).reduce((a,b) => a+b, 0); }
-    function mediaViagensDiaria() { let v = (getCurrentWeekData().viagens || [0,0,0,0,0,0,0]).filter(x => x > 0); return v.length ? (v.reduce((a,b)=>a+b,0)/v.length) : 0; }
+
+    function mediaViagensDiaria() { 
+        let v = (getCurrentWeekData().viagens || [0,0,0,0,0,0,0]).filter(x => x > 0); 
+        return v.length ? (v.reduce((a,b)=>a+b,0)/v.length) : 0; 
+    }
+
     function mediaPorKm() { 
         let km = totalKms(); 
         if (km === 0) return 0;
         return totalReceitas()/km; 
     }
+
     function minimoDiario() { return totalDespesas()/6; }
-    function mediaBrutaDiaria() { let r = getCurrentWeekData().receitas.filter(v => v > 0); return r.length ? r.reduce((a,b)=>a+b,0)/r.length : 0; }
-    function mediaLiquidaDiaria() { let dias = getCurrentWeekData().receitas.filter(v => v > 0).length; return dias ? mediaBrutaDiaria() - (totalDespesas()/6) : 0; }
+
+    function mediaBrutaDiaria() { 
+        let r = getCurrentWeekData().receitas.filter(v => v > 0); 
+        return r.length ? r.reduce((a,b)=>a+b,0)/r.length : 0; 
+    }
+
+    function mediaLiquidaDiaria() { 
+        let dias = getCurrentWeekData().receitas.filter(v => v > 0).length; 
+        return dias ? mediaBrutaDiaria() - (totalDespesas()/6) : 0; 
+    }
 
     function temLembretesPendentes() {
         for (let key in store.semanas) {
@@ -2257,16 +2535,23 @@
 
     function atualizarBotaoLembrete() {
         const btn = document.getElementById('reminderBtn');
-        if (temLembretesPendentes()) {
-            btn.classList.add('has-reminder');
-            btn.innerHTML = '🔔 Lembretes ⚠️';
-        } else {
-            btn.classList.remove('has-reminder');
-            btn.innerHTML = '🔔 Lembretes';
+        if (btn) {
+            if (temLembretesPendentes()) {
+                btn.classList.add('has-reminder');
+                btn.innerHTML = '🔔 Lembretes ⚠️';
+            } else {
+                btn.classList.remove('has-reminder');
+                btn.innerHTML = '🔔 Lembretes';
+            }
         }
     }
 
-    // ===== RENDERIZAR INPUTS DIÁRIOS COM KM COMO PREFIXO =====
+    function escapeHtml(str) { 
+        if (!str) return ''; 
+        return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); 
+    }
+
+    // ===== FUNÇÕES DE INTERFACE =====
     function renderizarInputsDiarios() {
         let html = '';
         for (let i=0; i<7; i++) {
@@ -2274,13 +2559,25 @@
                 <label>${DIAS[i]}</label>
                 <div class="daily-inputs">
                     <div class="input-wrapper"><span class="input-prefix">R$</span>
-                    <input type="number" id="${REVENUE_IDS[i]}" step="0.01" placeholder="0,00"></div>
-                    <div class="input-wrapper km-wrapper"><span class="km-prefix">km</span><input type="number" id="${KM_IDS[i]}" step="0.1" placeholder="0"></div>
-                    <div class="input-wrapper viagens-wrapper"><span class="viagens-prefix">🚗</span><input type="number" id="${VIAGENS_IDS[i]}" step="1" placeholder="0" min="0"></div>
+                    <input type="number" id="${REVENUE_IDS[i]}" step="0.01" placeholder="0,00" oninput="marcarFaturamentoAlterado()"></div>
+                    <div class="input-wrapper km-wrapper"><span class="km-prefix">km</span><input type="number" id="${KM_IDS[i]}" step="0.1" placeholder="0" oninput="marcarFaturamentoAlterado()"></div>
+                    <div class="input-wrapper viagens-wrapper"><span class="viagens-prefix">🚗</span><input type="number" id="${VIAGENS_IDS[i]}" step="1" placeholder="0" min="0" oninput="marcarFaturamentoAlterado()"></div>
                 </div>
             </div>`;
         }
         document.getElementById('dailyGrid').innerHTML = html;
+        REVENUE_IDS.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('input', marcarFaturamentoAlterado);
+        });
+        KM_IDS.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('input', marcarFaturamentoAlterado);
+        });
+        VIAGENS_IDS.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('input', marcarFaturamentoAlterado);
+        });
     }
 
     function atualizarInputsDiarios() {
@@ -2295,8 +2592,12 @@
             if (v) v.value = sem.viagens[i] || '';
         }
         const rKm = mediaPorKm();
-        document.getElementById('dailyTotalDisplay').innerHTML =
-            `💰 Total: R$ ${totalReceitas().toFixed(2)} | 📍 KM Total: ${totalKms().toFixed(1)} km | 🚗 Total: ${totalViagens()} viagens | ⚡ R$/KM: R$ ${rKm.toFixed(2)}`;
+        const totalDisplay = document.getElementById('dailyTotalDisplay');
+        if (totalDisplay) {
+            totalDisplay.innerHTML =
+                `💰 Total: R$ ${totalReceitas().toFixed(2)} | 📍 KM Total: ${totalKms().toFixed(1)} km | 🚗 Total: ${totalViagens()} viagens | ⚡ R$/KM: R$ ${rKm.toFixed(2)}`;
+        }
+        resetarFlagFaturamento();
     }
 
     function validarCamposAntesDeSalvar() {
@@ -2310,11 +2611,13 @@
         }
         const msgDiv = document.getElementById('dailyValidationMsg');
         if (camposInvalidos.length > 0) {
-            msgDiv.style.display = 'block';
-            msgDiv.innerHTML = `⚠️ Nos dias ${camposInvalidos.join(', ')} preencha R$ e KM juntos!`;
+            if (msgDiv) {
+                msgDiv.style.display = 'block';
+                msgDiv.innerHTML = `⚠️ Nos dias ${camposInvalidos.join(', ')} preencha R$ e KM juntos!`;
+            }
             return false;
         }
-        msgDiv.style.display = 'none';
+        if (msgDiv) msgDiv.style.display = 'none';
         return true;
     }
 
@@ -2342,6 +2645,7 @@
         atualizarInputsDiarios();
         atualizarTudo();
         toast('Faturamento, KM e Viagens salvos!');
+        resetarFlagFaturamento();
     }
 
     function salvarReceitasKMsSilencioso() {
@@ -2351,247 +2655,266 @@
         sem.kms = KM_IDS.map(id => { let v = parseFloat(document.getElementById(id)?.value); return isNaN(v)?0:v; });
         sem.viagens = VIAGENS_IDS.map(id => { let v = parseInt(document.getElementById(id)?.value); return isNaN(v)?0:v; });
         salvar();
+        resetarFlagFaturamento();
     }
 
     function adicionarDespesaCarro() {
-        let categoria = document.getElementById('carExpenseCategory').value;
-        let valor = parseFloat(document.getElementById('carExpenseValue').value);
-        let dataVenc = document.getElementById('carExpenseDate').value;
-        let status = document.getElementById('carExpenseStatus').value;
-        let descricao = document.getElementById('carExpenseDesc').value.trim();
-        
-        if (isNaN(valor) || valor <= 0) return toast('Valor inválido', true);
-        if (categoria === 'Outros' && !descricao) return toast('Para "Outros" descreva o gasto!', true);
-        
-        let nome = categoria;
-        if (categoria === 'Outros' && descricao) { nome = `Outros: ${descricao}`; }
-        
-        if (dataVenc && status !== 'paid') {
-            let hoje = getCurrentDateSP();
-            hoje.setHours(0,0,0,0);
-            let venc = parseDateFromInput(dataVenc);
-            if (venc) { 
-                venc.setHours(0,0,0,0); 
-                if (venc < hoje) status = 'overdue'; 
+        try {
+            let categoria = document.getElementById('carExpenseCategory').value;
+            let valor = parseFloat(document.getElementById('carExpenseValue').value);
+            let dataVenc = document.getElementById('carExpenseDate').value;
+            let status = document.getElementById('carExpenseStatus').value;
+            let descricao = document.getElementById('carExpenseDesc').value.trim();
+            
+            if (isNaN(valor) || valor <= 0) return toast('Valor inválido', true);
+            if (categoria === 'Outros' && !descricao) return toast('Para "Outros" descreva o gasto!', true);
+            
+            let nome = categoria;
+            if (categoria === 'Outros' && descricao) { nome = `Outros: ${descricao}`; }
+            
+            if (dataVenc && status !== 'paid') {
+                let hoje = getCurrentDateSP();
+                hoje.setHours(0,0,0,0);
+                let venc = parseDateFromInput(dataVenc);
+                if (venc) { 
+                    venc.setHours(0,0,0,0); 
+                    if (venc < hoje) status = 'overdue'; 
+                }
             }
-        }
-        
-        let weekKey;
-        if (dataVenc) {
-            weekKey = getWeekKeyFromDate(dataVenc);
-        } else {
-            weekKey = getWeekKey(currentWeek);
-        }
-        
-        if (!store.semanas[weekKey]) {
-            store.semanas[weekKey] = { 
-                carro:[], 
-                pessoal:[], 
-                receitas:[0,0,0,0,0,0,0], 
-                kms:[0,0,0,0,0,0,0],
-                viagens:[0,0,0,0,0,0,0], 
-                meta:null 
+            
+            let weekKey;
+            if (dataVenc) {
+                weekKey = getWeekKeyFromDate(dataVenc);
+            } else {
+                weekKey = getWeekKey(currentWeek);
+            }
+            
+            if (!store.semanas[weekKey]) {
+                store.semanas[weekKey] = { 
+                    carro:[], 
+                    pessoal:[], 
+                    receitas:[0,0,0,0,0,0,0], 
+                    kms:[0,0,0,0,0,0,0],
+                    viagens:[0,0,0,0,0,0,0], 
+                    meta:null 
+                };
+            }
+            
+            let nova = { 
+                nome, 
+                categoria, 
+                descricao: categoria === 'Outros' ? descricao : '', 
+                valor, 
+                dataVenc, 
+                status 
             };
-        }
-        
-        let nova = { 
-            nome, 
-            categoria, 
-            descricao: categoria === 'Outros' ? descricao : '', 
-            valor, 
-            dataVenc, 
-            status 
-        };
-        store.semanas[weekKey].carro.push(nova);
-        salvar();
-        
-        document.getElementById('carExpenseValue').value = '';
-        document.getElementById('carExpenseDate').value = '';
-        document.getElementById('carExpenseDesc').value = '';
-        
-        const currentWeekKey = getWeekKey(currentWeek);
-        if (weekKey === currentWeekKey) {
-            atualizarTudo();
-        } else {
-            atualizarListasDespesas();
-            atualizarCards();
-            atualizarEstatisticas();
-            atualizarLembretes();
-            atualizarBotaoLembrete();
-            atualizarResumoMensal();
-            atualizarSaldoMensal();
-            toast(`Despesa "${categoria}" adicionada na semana ${weekKey}!`);
+            store.semanas[weekKey].carro.push(nova);
+            salvar();
+            
+            document.getElementById('carExpenseValue').value = '';
+            document.getElementById('carExpenseDate').value = '';
+            document.getElementById('carExpenseDesc').value = '';
+            
+            const currentWeekKey = getWeekKey(currentWeek);
+            if (weekKey === currentWeekKey) {
+                atualizarTudo();
+            } else {
+                atualizarListasDespesas();
+                atualizarCards();
+                atualizarEstatisticas();
+                atualizarLembretes();
+                atualizarBotaoLembrete();
+                atualizarResumoMensal();
+                atualizarSaldoMensal();
+                toast(`Despesa "${categoria}" adicionada na semana ${weekKey}!`);
+            }
+        } catch (e) {
+            console.error('Erro em adicionarDespesaCarro:', e);
+            toast('Erro ao adicionar despesa', true);
         }
     }
 
     function adicionarDespesaPessoal() {
-        let categoria = document.getElementById('personalExpenseCategory').value;
-        let valor = parseFloat(document.getElementById('personalExpenseValue').value);
-        let dataVenc = document.getElementById('personalExpenseDate').value;
-        let status = document.getElementById('personalExpenseStatus').value;
-        let descricao = document.getElementById('personalExpenseDesc').value.trim();
-        
-        if (isNaN(valor) || valor <= 0) return toast('Valor inválido', true);
-        if (categoria === 'Outros' && !descricao) return toast('Para "Outros" descreva o gasto!', true);
-        
-        let nome = categoria;
-        if (categoria === 'Outros' && descricao) { nome = `Outros: ${descricao}`; }
-        
-        if (dataVenc && status !== 'paid') {
-            let hoje = getCurrentDateSP();
-            hoje.setHours(0,0,0,0);
-            let venc = parseDateFromInput(dataVenc);
-            if (venc) { 
-                venc.setHours(0,0,0,0); 
-                if (venc < hoje) status = 'overdue'; 
+        try {
+            let categoria = document.getElementById('personalExpenseCategory').value;
+            let valor = parseFloat(document.getElementById('personalExpenseValue').value);
+            let dataVenc = document.getElementById('personalExpenseDate').value;
+            let status = document.getElementById('personalExpenseStatus').value;
+            let descricao = document.getElementById('personalExpenseDesc').value.trim();
+            
+            if (isNaN(valor) || valor <= 0) return toast('Valor inválido', true);
+            if (categoria === 'Outros' && !descricao) return toast('Para "Outros" descreva o gasto!', true);
+            
+            let nome = categoria;
+            if (categoria === 'Outros' && descricao) { nome = `Outros: ${descricao}`; }
+            
+            if (dataVenc && status !== 'paid') {
+                let hoje = getCurrentDateSP();
+                hoje.setHours(0,0,0,0);
+                let venc = parseDateFromInput(dataVenc);
+                if (venc) { 
+                    venc.setHours(0,0,0,0); 
+                    if (venc < hoje) status = 'overdue'; 
+                }
             }
-        }
-        
-        let weekKey;
-        if (dataVenc) {
-            weekKey = getWeekKeyFromDate(dataVenc);
-        } else {
-            weekKey = getWeekKey(currentWeek);
-        }
-        
-        if (!store.semanas[weekKey]) {
-            store.semanas[weekKey] = { 
-                carro:[], 
-                pessoal:[], 
-                receitas:[0,0,0,0,0,0,0], 
-                kms:[0,0,0,0,0,0,0],
-                viagens:[0,0,0,0,0,0,0], 
-                meta:null 
+            
+            let weekKey;
+            if (dataVenc) {
+                weekKey = getWeekKeyFromDate(dataVenc);
+            } else {
+                weekKey = getWeekKey(currentWeek);
+            }
+            
+            if (!store.semanas[weekKey]) {
+                store.semanas[weekKey] = { 
+                    carro:[], 
+                    pessoal:[], 
+                    receitas:[0,0,0,0,0,0,0], 
+                    kms:[0,0,0,0,0,0,0],
+                    viagens:[0,0,0,0,0,0,0], 
+                    meta:null 
+                };
+            }
+            
+            let nova = { 
+                nome, 
+                categoria, 
+                descricao: categoria === 'Outros' ? descricao : '', 
+                valor, 
+                dataVenc, 
+                status 
             };
-        }
-        
-        let nova = { 
-            nome, 
-            categoria, 
-            descricao: categoria === 'Outros' ? descricao : '', 
-            valor, 
-            dataVenc, 
-            status 
-        };
-        store.semanas[weekKey].pessoal.push(nova);
-        salvar();
-        
-        document.getElementById('personalExpenseValue').value = '';
-        document.getElementById('personalExpenseDate').value = '';
-        document.getElementById('personalExpenseDesc').value = '';
-        
-        const currentWeekKey = getWeekKey(currentWeek);
-        if (weekKey === currentWeekKey) {
-            atualizarTudo();
-        } else {
-            atualizarListasDespesas();
-            atualizarCards();
-            atualizarEstatisticas();
-            atualizarLembretes();
-            atualizarBotaoLembrete();
-            atualizarResumoMensal();
-            atualizarSaldoMensal();
-            toast(`Despesa "${categoria}" adicionada na semana ${weekKey}!`);
+            store.semanas[weekKey].pessoal.push(nova);
+            salvar();
+            
+            document.getElementById('personalExpenseValue').value = '';
+            document.getElementById('personalExpenseDate').value = '';
+            document.getElementById('personalExpenseDesc').value = '';
+            
+            const currentWeekKey = getWeekKey(currentWeek);
+            if (weekKey === currentWeekKey) {
+                atualizarTudo();
+            } else {
+                atualizarListasDespesas();
+                atualizarCards();
+                atualizarEstatisticas();
+                atualizarLembretes();
+                atualizarBotaoLembrete();
+                atualizarResumoMensal();
+                atualizarSaldoMensal();
+                toast(`Despesa "${categoria}" adicionada na semana ${weekKey}!`);
+            }
+        } catch (e) {
+            console.error('Erro em adicionarDespesaPessoal:', e);
+            toast('Erro ao adicionar despesa', true);
         }
     }
 
-    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
-
-    window.alterarStatus = function(tipo, idx, novo) {
-        let sem = getCurrentWeekData();
-        let arr = tipo === 'carro' ? sem.carro : sem.pessoal;
-        if (arr[idx]) { 
-            arr[idx].status = novo; 
-            salvar(); 
-            atualizarTudo(); 
-            toast('Status alterado!'); 
-        }
-    };
-    window.excluirDespesa = function(tipo, idx) {
-        if (confirm('Excluir?')) {
+    // ===== RENDERIZAÇÃO DAS DESPESAS =====
+    function atualizarListasDespesas() {
+        try {
             let sem = getCurrentWeekData();
-            if (tipo === 'carro') sem.carro.splice(idx, 1);
-            else sem.pessoal.splice(idx, 1);
-            salvar(); 
-            atualizarTudo(); 
-            toast('Despesa excluída');
-        }
-    };
-    window.editarDespesa = function(tipo, idx) {
-        let sem = getCurrentWeekData();
-        let arr = tipo === 'carro' ? sem.carro : sem.pessoal;
-        let item = arr[idx];
-        if (tipo === 'carro') {
-            let novaCategoria = prompt('Categoria (Aluguel, Carregamento, Lavagem, Outros):', item.categoria || 'Outros');
-            if (!novaCategoria) return;
-            let novoValor = parseFloat(prompt('Valor (R$):', item.valor));
-            if (isNaN(novoValor)) return;
-            let novaData = prompt('Data (AAAA-MM-DD):', item.dataVenc || '');
-            if (novaData && parseDateFromInput(novaData)) {
-                const oldWeekKey = getWeekKey(currentWeek);
-                const newWeekKey = getWeekKeyFromDate(novaData);
-                if (newWeekKey !== oldWeekKey) {
-                    const itemRemovido = arr.splice(idx, 1)[0];
-                    itemRemovido.dataVenc = novaData;
-                    if (!store.semanas[newWeekKey]) {
-                        store.semanas[newWeekKey] = { carro:[], pessoal:[], receitas:[0,0,0,0,0,0,0], kms:[0,0,0,0,0,0,0], viagens:[0,0,0,0,0,0,0], meta:null };
-                    }
-                    store.semanas[newWeekKey].carro.push(itemRemovido);
-                    salvar();
-                    atualizarTudo();
-                    toast(`Despesa movida para semana ${newWeekKey}`);
-                    return;
+            const renderCarro = (arr, containerId) => {
+                let cont = document.getElementById(containerId);
+                if (!cont) return;
+                if (!arr || !arr.length) { 
+                    cont.innerHTML = '<div class="empty-msg">Nenhuma despesa do carro</div>'; 
+                    return; 
                 }
-                item.dataVenc = novaData;
-            }
-            let novaDesc = '';
-            if (novaCategoria === 'Outros') {
-                novaDesc = prompt('Descrição do gasto:', item.descricao || '');
-                if (novaDesc === null) return;
-                item.nome = `Outros: ${novaDesc}`;
-                item.descricao = novaDesc;
-            } else { item.nome = novaCategoria; item.descricao = ''; }
-            item.categoria = novaCategoria;
-            item.valor = novoValor;
-        } else {
-            let novasCategorias = ['Aluguel AP', 'Condomínio', 'Luz', 'Internet', 'Mercado', 'Pensão', 'Outros'];
-            let novaCategoria = prompt('Categoria:', item.categoria || 'Outros');
-            if (!novaCategoria || !novasCategorias.includes(novaCategoria)) return;
-            let novoValor = parseFloat(prompt('Valor (R$):', item.valor));
-            if (isNaN(novoValor)) return;
-            let novaData = prompt('Data (AAAA-MM-DD):', item.dataVenc || '');
-            if (novaData && parseDateFromInput(novaData)) {
-                const oldWeekKey = getWeekKey(currentWeek);
-                const newWeekKey = getWeekKeyFromDate(novaData);
-                if (newWeekKey !== oldWeekKey) {
-                    const itemRemovido = arr.splice(idx, 1)[0];
-                    itemRemovido.dataVenc = novaData;
-                    if (!store.semanas[newWeekKey]) {
-                        store.semanas[newWeekKey] = { carro:[], pessoal:[], receitas:[0,0,0,0,0,0,0], kms:[0,0,0,0,0,0,0], viagens:[0,0,0,0,0,0,0], meta:null };
+                cont.innerHTML = arr.map((item, idx) => {
+                    const itemId = `carro-${idx}`;
+                    let dataFormatada = '📅 Sem data definida';
+                    if (item.dataVenc) {
+                        let d = parseDateFromInput(item.dataVenc);
+                        if (d) dataFormatada = `📅 Vence: ${d.toLocaleDateString('pt-BR')}`;
                     }
-                    store.semanas[newWeekKey].pessoal.push(itemRemovido);
-                    salvar();
-                    atualizarTudo();
-                    toast(`Despesa movida para semana ${newWeekKey}`);
-                    return;
+                    const catClass = (item.categoria || 'outros').toLowerCase();
+                    const catIcon = item.categoria === 'Aluguel' ? '🚙' : item.categoria === 'Carregamento' ? '⚡' : item.categoria === 'Lavagem' ? '🧽' : '📦';
+                    const displayNome = item.categoria === 'Outros' && item.descricao ? `Outros: ${escapeHtml(item.descricao)}` : escapeHtml(item.nome || item.categoria || 'Outros');
+                    const borderColor = item.categoria === 'Aluguel' ? '#f59e0b' : item.categoria === 'Carregamento' ? '#3b82f6' : item.categoria === 'Lavagem' ? '#8b5cf6' : '#6b7280';
+                    return `<div class="expense-item" id="${itemId}" style="border-left-color:${borderColor}">
+                        <div class="expense-header" onclick="toggleExpense('${itemId}')">
+                            <div class="expense-name">
+                                ${catIcon} ${displayNome}
+                                <span class="cat-badge ${catClass}">${item.categoria || 'Outros'}</span>
+                                <span class="receipt-badge ${item.receipt?'has-receipt':''}" onclick="event.stopPropagation();abrirReceitaModal('carro',${idx})">${item.receipt?'📎 Ver':'📎 Anexar'}</span>
+                            </div>
+                            <div class="expense-value">R$ ${item.valor.toFixed(2)}</div>
+                            <span class="arrow">▼</span>
+                        </div>
+                        <div class="expense-body">
+                            <div class="expense-date">${dataFormatada}</div>
+                            <div class="expense-row">
+                                <select class="status-select" onchange="alterarStatus('carro',${idx},this.value)">
+                                    <option value="pending" ${item.status==='pending'?'selected':''}>📅 Aberto</option>
+                                    <option value="paid" ${item.status==='paid'?'selected':''}>✅ Paga</option>
+                                    <option value="overdue" ${item.status==='overdue'?'selected':''}>⚠️ Atrasada</option>
+                                </select>
+                                <div class="expense-actions">
+                                    <button onclick="editarDespesa('carro',${idx})">✏️</button>
+                                    <button onclick="excluirDespesa('carro',${idx})">🗑️</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
+            };
+            const renderPessoal = (arr, containerId) => {
+                let cont = document.getElementById(containerId);
+                if (!cont) return;
+                if (!arr || !arr.length) { 
+                    cont.innerHTML = '<div class="empty-msg">Nenhuma despesa pessoal</div>'; 
+                    return; 
                 }
-                item.dataVenc = novaData;
-            }
-            let novaDesc = '';
-            if (novaCategoria === 'Outros') {
-                novaDesc = prompt('Descrição do gasto:', item.descricao || '');
-                if (novaDesc === null) return;
-                item.nome = `Outros: ${novaDesc}`;
-                item.descricao = novaDesc;
-            } else { item.nome = novaCategoria; item.descricao = ''; }
-            item.categoria = novaCategoria;
-            item.valor = novoValor;
+                cont.innerHTML = arr.map((item, idx) => {
+                    const itemId = `pessoal-${idx}`;
+                    let dataFormatada = '📅 Sem data definida';
+                    if (item.dataVenc) {
+                        let d = parseDateFromInput(item.dataVenc);
+                        if (d) dataFormatada = `📅 Vence: ${d.toLocaleDateString('pt-BR')}`;
+                    }
+                    const catClass = (item.categoria || 'outros').toLowerCase().replace(/\s/g, '-');
+                    const catIcon = item.categoria === 'Aluguel AP' ? '🏠' : item.categoria === 'Condomínio' ? '🏢' : item.categoria === 'Luz' ? '💡' : item.categoria === 'Internet' ? '🌐' : item.categoria === 'Mercado' ? '🛒' : item.categoria === 'Pensão' ? '👶' : '📦';
+                    const displayNome = item.categoria === 'Outros' && item.descricao ? `Outros: ${escapeHtml(item.descricao)}` : escapeHtml(item.nome || item.categoria || 'Outros');
+                    const borderColor = item.categoria === 'Aluguel AP' ? '#ef4444' : item.categoria === 'Condomínio' ? '#f97316' : item.categoria === 'Luz' ? '#eab308' : item.categoria === 'Internet' ? '#06b6d4' : item.categoria === 'Mercado' ? '#22c55e' : item.categoria === 'Pensão' ? '#ec4899' : '#6b7280';
+                    return `<div class="expense-item" id="${itemId}" style="border-left-color:${borderColor}">
+                        <div class="expense-header" onclick="toggleExpense('${itemId}')">
+                            <div class="expense-name">
+                                ${catIcon} ${displayNome}
+                                <span class="cat-badge ${catClass}">${item.categoria || 'Outros'}</span>
+                                <span class="receipt-badge ${item.receipt?'has-receipt':''}" onclick="event.stopPropagation();abrirReceitaModal('pessoal',${idx})">${item.receipt?'📎 Ver':'📎 Anexar'}</span>
+                            </div>
+                            <div class="expense-value">R$ ${item.valor.toFixed(2)}</div>
+                            <span class="arrow">▼</span>
+                        </div>
+                        <div class="expense-body">
+                            <div class="expense-date">${dataFormatada}</div>
+                            <div class="expense-row">
+                                <select class="status-select" onchange="alterarStatus('pessoal',${idx},this.value)">
+                                    <option value="pending" ${item.status==='pending'?'selected':''}>📅 Aberto</option>
+                                    <option value="paid" ${item.status==='paid'?'selected':''}>✅ Paga</option>
+                                    <option value="overdue" ${item.status==='overdue'?'selected':''}>⚠️ Atrasada</option>
+                                </select>
+                                <div class="expense-actions">
+                                    <button onclick="editarDespesa('pessoal',${idx})">✏️</button>
+                                    <button onclick="excluirDespesa('pessoal',${idx})">🗑️</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
+            };
+            renderCarro(sem.carro || [], 'carExpensesList');
+            renderPessoal(sem.pessoal || [], 'personalExpensesList');
+            atualizarBadges();
+            const carCount = document.getElementById('carCountBadge');
+            const personalCount = document.getElementById('personalCountBadge');
+            if (carCount) carCount.textContent = `(${sem.carro?.length || 0})`;
+            if (personalCount) personalCount.textContent = `(${sem.pessoal?.length || 0})`;
+        } catch (e) {
+            console.error('Erro em atualizarListasDespesas:', e);
         }
-        salvar(); 
-        atualizarStatusContas(); 
-        atualizarTudo(); 
-        toast('Atualizada!');
-    };
+    }
 
     function atualizarBadges() {
         let sem = getCurrentWeekData();
@@ -2601,249 +2924,255 @@
         if (badgePersonal) badgePersonal.textContent = sem.pessoal ? sem.pessoal.length : 0;
     }
 
-    function atualizarListasDespesas() {
-        let sem = getCurrentWeekData();
-        const renderCarro = (arr, containerId) => {
-            let cont = document.getElementById(containerId);
-            if (!arr || !arr.length) { 
-                if (cont) cont.innerHTML = '<div class="empty-msg">Nenhuma despesa do carro</div>'; 
-                return; 
-            }
-            cont.innerHTML = arr.map((item, idx) => {
-                let dataFormatada = '📅 Sem data definida';
-                if (item.dataVenc) {
-                    let d = parseDateFromInput(item.dataVenc);
-                    if (d) dataFormatada = `📅 Vence: ${d.toLocaleDateString('pt-BR')}`;
-                }
-                const catClass = (item.categoria || 'outros').toLowerCase();
-                const catIcon = item.categoria === 'Aluguel' ? '🚙' : item.categoria === 'Carregamento' ? '⚡' : item.categoria === 'Lavagem' ? '🧽' : '📦';
-                const displayNome = item.categoria === 'Outros' && item.descricao ? `Outros: ${escapeHtml(item.descricao)}` : escapeHtml(item.nome || item.categoria || 'Outros');
-                const borderColor = item.categoria === 'Aluguel' ? '#f59e0b' : item.categoria === 'Carregamento' ? '#3b82f6' : item.categoria === 'Lavagem' ? '#8b5cf6' : '#6b7280';
-                return `<div class="expense-item" style="border-left-color:${borderColor}">
-                    <div class="expense-row">
-                        <div class="expense-info">
-                            <div class="expense-name">${catIcon} ${displayNome}
-                            <span class="cat-badge ${catClass}">${item.categoria || 'Outros'}</span>
-                            <span class="receipt-badge ${item.receipt?'has-receipt':''}" onclick="abrirReceitaModal('carro',${idx})">${item.receipt?'📎 Ver':'📎 Anexar'}</span></div>
-                            <div class="expense-date">${dataFormatada}</div>
-                        </div>
-                        <div class="expense-value">R$ ${item.valor.toFixed(2)}</div>
-                        <select class="status-select" onchange="alterarStatus('carro',${idx},this.value)">
-                            <option value="pending" ${item.status==='pending'?'selected':''}>📅 Aberto</option>
-                            <option value="paid" ${item.status==='paid'?'selected':''}>✅ Paga</option>
-                            <option value="overdue" ${item.status==='overdue'?'selected':''}>⚠️ Atrasada</option>
-                        </select>
-                        <div class="expense-actions">
-                            <button onclick="editarDespesa('carro',${idx})">✏️</button>
-                            <button onclick="excluirDespesa('carro',${idx})">🗑️</button>
-                        </div>
-                    </div>
-                </div>`;
-            }).join('');
-        };
-        const renderPessoal = (arr, containerId) => {
-            let cont = document.getElementById(containerId);
-            if (!arr || !arr.length) { 
-                if (cont) cont.innerHTML = '<div class="empty-msg">Nenhuma despesa pessoal</div>'; 
-                return; 
-            }
-            cont.innerHTML = arr.map((item, idx) => {
-                let dataFormatada = '📅 Sem data definida';
-                if (item.dataVenc) {
-                    let d = parseDateFromInput(item.dataVenc);
-                    if (d) dataFormatada = `📅 Vence: ${d.toLocaleDateString('pt-BR')}`;
-                }
-                const catClass = (item.categoria || 'outros').toLowerCase().replace(/\s/g, '-');
-                const catIcon = item.categoria === 'Aluguel AP' ? '🏠' : item.categoria === 'Condomínio' ? '🏢' : item.categoria === 'Luz' ? '💡' : item.categoria === 'Internet' ? '🌐' : item.categoria === 'Mercado' ? '🛒' : item.categoria === 'Pensão' ? '👶' : '📦';
-                const displayNome = item.categoria === 'Outros' && item.descricao ? `Outros: ${escapeHtml(item.descricao)}` : escapeHtml(item.nome || item.categoria || 'Outros');
-                const borderColor = item.categoria === 'Aluguel AP' ? '#ef4444' : item.categoria === 'Condomínio' ? '#f97316' : item.categoria === 'Luz' ? '#eab308' : item.categoria === 'Internet' ? '#06b6d4' : item.categoria === 'Mercado' ? '#22c55e' : item.categoria === 'Pensão' ? '#ec4899' : '#6b7280';
-                return `<div class="expense-item" style="border-left-color:${borderColor}">
-                    <div class="expense-row">
-                        <div class="expense-info">
-                            <div class="expense-name">${catIcon} ${displayNome}
-                            <span class="cat-badge ${catClass}">${item.categoria || 'Outros'}</span>
-                            <span class="receipt-badge ${item.receipt?'has-receipt':''}" onclick="abrirReceitaModal('pessoal',${idx})">${item.receipt?'📎 Ver':'📎 Anexar'}</span></div>
-                            <div class="expense-date">${dataFormatada}</div>
-                        </div>
-                        <div class="expense-value">R$ ${item.valor.toFixed(2)}</div>
-                        <select class="status-select" onchange="alterarStatus('pessoal',${idx},this.value)">
-                            <option value="pending" ${item.status==='pending'?'selected':''}>📅 Aberto</option>
-                            <option value="paid" ${item.status==='paid'?'selected':''}>✅ Paga</option>
-                            <option value="overdue" ${item.status==='overdue'?'selected':''}>⚠️ Atrasada</option>
-                        </select>
-                        <div class="expense-actions">
-                            <button onclick="editarDespesa('pessoal',${idx})">✏️</button>
-                            <button onclick="excluirDespesa('pessoal',${idx})">🗑️</button>
-                        </div>
-                    </div>
-                </div>`;
-            }).join('');
-        };
-        renderCarro(sem.carro || [], 'carExpensesList');
-        renderPessoal(sem.pessoal || [], 'personalExpensesList');
-        atualizarBadges();
-    }
-
     // ===== SALDO DO MÊS =====
     function atualizarSaldoMensal() {
-        const month = currentMonth.getMonth();
-        const year = currentMonth.getFullYear();
-        
-        let totalFaturamento = 0;
-        let totalDespesasMes = 0;
+        try {
+            const month = currentMonth.getMonth();
+            const year = currentMonth.getFullYear();
+            
+            let totalFaturamento = 0;
+            let totalDespesasMes = 0;
 
-        for (let weekKey in store.semanas) {
-            const sem = store.semanas[weekKey];
-            const weekDate = parseDateFromInput(weekKey);
-            if (!weekDate) continue;
-            if (weekDate.getMonth() !== month || weekDate.getFullYear() !== year) continue;
+            for (let weekKey in store.semanas) {
+                const sem = store.semanas[weekKey];
+                const weekDate = parseDateFromInput(weekKey);
+                if (!weekDate) continue;
+                if (weekDate.getMonth() !== month || weekDate.getFullYear() !== year) continue;
 
-            if (sem.receitas) {
-                totalFaturamento += sem.receitas.reduce((a, b) => a + b, 0);
+                if (sem.receitas) {
+                    totalFaturamento += sem.receitas.reduce((a, b) => a + b, 0);
+                }
+
+                if (sem.carro) {
+                    sem.carro.forEach(exp => {
+                        let expDate = exp.dataVenc ? parseDateFromInput(exp.dataVenc) : weekDate;
+                        if (!expDate) expDate = weekDate;
+                        if (expDate.getMonth() === month && expDate.getFullYear() === year) {
+                            totalDespesasMes += exp.valor;
+                        }
+                    });
+                }
+
+                if (sem.pessoal) {
+                    sem.pessoal.forEach(exp => {
+                        let expDate = exp.dataVenc ? parseDateFromInput(exp.dataVenc) : weekDate;
+                        if (!expDate) expDate = weekDate;
+                        if (expDate.getMonth() === month && expDate.getFullYear() === year) {
+                            totalDespesasMes += exp.valor;
+                        }
+                    });
+                }
             }
 
-            if (sem.carro) {
-                sem.carro.forEach(exp => {
-                    let expDate = exp.dataVenc ? parseDateFromInput(exp.dataVenc) : weekDate;
-                    if (!expDate) expDate = weekDate;
-                    if (expDate.getMonth() === month && expDate.getFullYear() === year) {
-                        totalDespesasMes += exp.valor;
-                    }
-                });
-            }
+            const saldo = totalFaturamento - totalDespesasMes;
 
-            if (sem.pessoal) {
-                sem.pessoal.forEach(exp => {
-                    let expDate = exp.dataVenc ? parseDateFromInput(exp.dataVenc) : weekDate;
-                    if (!expDate) expDate = weekDate;
-                    if (expDate.getMonth() === month && expDate.getFullYear() === year) {
-                        totalDespesasMes += exp.valor;
-                    }
-                });
+            const fatEl = document.getElementById('balanceFaturamento');
+            const despEl = document.getElementById('balanceDespesas');
+            const saldoEl = document.getElementById('balanceSaldo');
+            if (fatEl) fatEl.textContent = `R$ ${totalFaturamento.toFixed(2)}`;
+            if (despEl) despEl.textContent = `R$ ${totalDespesasMes.toFixed(2)}`;
+            if (saldoEl) {
+                saldoEl.textContent = `R$ ${saldo.toFixed(2)}`;
+                saldoEl.className = 'balance-value';
+                if (saldo > 0) saldoEl.classList.add('positive');
+                else if (saldo < 0) saldoEl.classList.add('negative');
+                else saldoEl.classList.add('neutral');
             }
+        } catch (e) {
+            console.error('Erro em atualizarSaldoMensal:', e);
         }
-
-        const saldo = totalFaturamento - totalDespesasMes;
-
-        document.getElementById('balanceFaturamento').textContent = `R$ ${totalFaturamento.toFixed(2)}`;
-        document.getElementById('balanceDespesas').textContent = `R$ ${totalDespesasMes.toFixed(2)}`;
-        
-        const saldoEl = document.getElementById('balanceSaldo');
-        saldoEl.textContent = `R$ ${saldo.toFixed(2)}`;
-        saldoEl.className = 'balance-value';
-        if (saldo > 0) saldoEl.classList.add('positive');
-        else if (saldo < 0) saldoEl.classList.add('negative');
-        else saldoEl.classList.add('neutral');
     }
 
     // ===== RESUMO MENSAL =====
     function atualizarResumoMensal() {
-        const month = currentMonth.getMonth();
-        const year = currentMonth.getFullYear();
-        const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-        document.getElementById('monthLabel').textContent = `${monthNames[month]} ${year}`;
+        try {
+            const month = currentMonth.getMonth();
+            const year = currentMonth.getFullYear();
+            const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            const labelEl = document.getElementById('monthLabel');
+            if (labelEl) labelEl.textContent = `${monthNames[month]} ${year}`;
 
-        const carroPorCategoria = {};
-        const pessoalPorCategoria = {};
-        let totalCarro = 0;
-        let totalPessoal = 0;
+            const carroPorCategoria = {};
+            const pessoalPorCategoria = {};
+            let totalCarro = 0;
+            let totalPessoal = 0;
 
-        for (let weekKey in store.semanas) {
-            const sem = store.semanas[weekKey];
-            const weekDate = parseDateFromInput(weekKey);
-            if (!weekDate) continue;
-            if (weekDate.getMonth() !== month || weekDate.getFullYear() !== year) continue;
+            for (let weekKey in store.semanas) {
+                const sem = store.semanas[weekKey];
+                const weekDate = parseDateFromInput(weekKey);
+                if (!weekDate) continue;
+                if (weekDate.getMonth() !== month || weekDate.getFullYear() !== year) continue;
 
-            if (sem.carro) {
-                sem.carro.forEach(exp => {
-                    let expDate = exp.dataVenc ? parseDateFromInput(exp.dataVenc) : weekDate;
-                    if (!expDate) expDate = weekDate;
-                    if (expDate.getMonth() !== month || expDate.getFullYear() !== year) return;
-                    
-                    const cat = exp.categoria || 'Outros';
-                    if (!carroPorCategoria[cat]) carroPorCategoria[cat] = 0;
-                    carroPorCategoria[cat] += exp.valor;
-                    totalCarro += exp.valor;
-                });
+                if (sem.carro) {
+                    sem.carro.forEach(exp => {
+                        let expDate = exp.dataVenc ? parseDateFromInput(exp.dataVenc) : weekDate;
+                        if (!expDate) expDate = weekDate;
+                        if (expDate.getMonth() !== month || expDate.getFullYear() !== year) return;
+                        
+                        const cat = exp.categoria || 'Outros';
+                        if (!carroPorCategoria[cat]) carroPorCategoria[cat] = 0;
+                        carroPorCategoria[cat] += exp.valor;
+                        totalCarro += exp.valor;
+                    });
+                }
+
+                if (sem.pessoal) {
+                    sem.pessoal.forEach(exp => {
+                        let expDate = exp.dataVenc ? parseDateFromInput(exp.dataVenc) : weekDate;
+                        if (!expDate) expDate = weekDate;
+                        if (expDate.getMonth() !== month || expDate.getFullYear() !== year) return;
+                        
+                        const cat = exp.categoria || 'Outros';
+                        if (!pessoalPorCategoria[cat]) pessoalPorCategoria[cat] = 0;
+                        pessoalPorCategoria[cat] += exp.valor;
+                        totalPessoal += exp.valor;
+                    });
+                }
             }
 
-            if (sem.pessoal) {
-                sem.pessoal.forEach(exp => {
-                    let expDate = exp.dataVenc ? parseDateFromInput(exp.dataVenc) : weekDate;
-                    if (!expDate) expDate = weekDate;
-                    if (expDate.getMonth() !== month || expDate.getFullYear() !== year) return;
-                    
-                    const cat = exp.categoria || 'Outros';
-                    if (!pessoalPorCategoria[cat]) pessoalPorCategoria[cat] = 0;
-                    pessoalPorCategoria[cat] += exp.valor;
-                    totalPessoal += exp.valor;
-                });
+            const carContainer = document.getElementById('carMonthlyList');
+            if (carContainer) {
+                if (Object.keys(carroPorCategoria).length === 0) {
+                    carContainer.innerHTML = '<div class="monthly-empty">Nenhum gasto do carro neste mês</div>';
+                } else {
+                    let html = '';
+                    const sortedCarro = Object.entries(carroPorCategoria).sort((a, b) => b[1] - a[1]);
+                    sortedCarro.forEach(([cat, valor]) => {
+                        const catIcon = cat === 'Aluguel' ? '🚙' : cat === 'Carregamento' ? '⚡' : cat === 'Lavagem' ? '🧽' : '📦';
+                        html += `<div class="cat-item">
+                            <span class="cat-name">${catIcon} ${cat}</span>
+                            <span class="cat-value">R$ ${valor.toFixed(2)}</span>
+                        </div>`;
+                    });
+                    html += `<div class="cat-total">
+                        <span class="total-label">💰 TOTAL CARRO</span>
+                        <span class="total-value">R$ ${totalCarro.toFixed(2)}</span>
+                    </div>`;
+                    carContainer.innerHTML = html;
+                }
             }
-        }
 
-        const carContainer = document.getElementById('carMonthlyList');
-        if (Object.keys(carroPorCategoria).length === 0) {
-            carContainer.innerHTML = '<div class="monthly-empty">Nenhum gasto do carro neste mês</div>';
-        } else {
-            let html = '';
-            const sortedCarro = Object.entries(carroPorCategoria).sort((a, b) => b[1] - a[1]);
-            sortedCarro.forEach(([cat, valor]) => {
-                const catIcon = cat === 'Aluguel' ? '🚙' : cat === 'Carregamento' ? '⚡' : cat === 'Lavagem' ? '🧽' : '📦';
-                html += `<div class="cat-item">
-                    <span class="cat-name">${catIcon} ${cat}</span>
-                    <span class="cat-value">R$ ${valor.toFixed(2)}</span>
-                </div>`;
-            });
-            html += `<div class="cat-total">
-                <span class="total-label">💰 TOTAL CARRO</span>
-                <span class="total-value">R$ ${totalCarro.toFixed(2)}</span>
-            </div>`;
-            carContainer.innerHTML = html;
-        }
+            const pessoalContainer = document.getElementById('personalMonthlyList');
+            if (pessoalContainer) {
+                if (Object.keys(pessoalPorCategoria).length === 0) {
+                    pessoalContainer.innerHTML = '<div class="monthly-empty">Nenhum gasto pessoal neste mês</div>';
+                } else {
+                    let html = '';
+                    const sortedPessoal = Object.entries(pessoalPorCategoria).sort((a, b) => b[1] - a[1]);
+                    sortedPessoal.forEach(([cat, valor]) => {
+                        const catIcon = cat === 'Aluguel AP' ? '🏠' : cat === 'Condomínio' ? '🏢' : cat === 'Luz' ? '💡' : cat === 'Internet' ? '🌐' : cat === 'Mercado' ? '🛒' : cat === 'Pensão' ? '👶' : '📦';
+                        html += `<div class="cat-item">
+                            <span class="cat-name">${catIcon} ${cat}</span>
+                            <span class="cat-value">R$ ${valor.toFixed(2)}</span>
+                        </div>`;
+                    });
+                    html += `<div class="cat-total">
+                        <span class="total-label">💰 TOTAL PESSOAL</span>
+                        <span class="total-value">R$ ${totalPessoal.toFixed(2)}</span>
+                    </div>`;
+                    pessoalContainer.innerHTML = html;
+                }
+            }
 
-        const pessoalContainer = document.getElementById('personalMonthlyList');
-        if (Object.keys(pessoalPorCategoria).length === 0) {
-            pessoalContainer.innerHTML = '<div class="monthly-empty">Nenhum gasto pessoal neste mês</div>';
-        } else {
-            let html = '';
-            const sortedPessoal = Object.entries(pessoalPorCategoria).sort((a, b) => b[1] - a[1]);
-            sortedPessoal.forEach(([cat, valor]) => {
-                const catIcon = cat === 'Aluguel AP' ? '🏠' : cat === 'Condomínio' ? '🏢' : cat === 'Luz' ? '💡' : cat === 'Internet' ? '🌐' : cat === 'Mercado' ? '🛒' : cat === 'Pensão' ? '👶' : '📦';
-                html += `<div class="cat-item">
-                    <span class="cat-name">${catIcon} ${cat}</span>
-                    <span class="cat-value">R$ ${valor.toFixed(2)}</span>
-                </div>`;
-            });
-            html += `<div class="cat-total">
-                <span class="total-label">💰 TOTAL PESSOAL</span>
-                <span class="total-value">R$ ${totalPessoal.toFixed(2)}</span>
-            </div>`;
-            pessoalContainer.innerHTML = html;
+            atualizarSaldoMensal();
+            atualizarGraficoMensal();
+        } catch (e) {
+            console.error('Erro em atualizarResumoMensal:', e);
         }
-
-        atualizarSaldoMensal();
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const carCatSelect = document.getElementById('carExpenseCategory');
-        const carDescContainer = document.getElementById('carDescContainer');
-        if (carCatSelect && carDescContainer) {
-            carCatSelect.addEventListener('change', function() {
-                if (this.value === 'Outros') { carDescContainer.classList.add('show'); }
-                else { carDescContainer.classList.remove('show'); document.getElementById('carExpenseDesc').value = ''; }
-            });
-        }
-        const personalCatSelect = document.getElementById('personalExpenseCategory');
-        const personalDescContainer = document.getElementById('personalDescContainer');
-        if (personalCatSelect && personalDescContainer) {
-            personalCatSelect.addEventListener('change', function() {
-                if (this.value === 'Outros') { personalDescContainer.classList.add('show'); }
-                else { personalDescContainer.classList.remove('show'); document.getElementById('personalExpenseDesc').value = ''; }
-            });
-        }
-    });
+    // ===== GRÁFICOS =====
+    function atualizarGraficoMensal() {
+        try {
+            const month = currentMonth.getMonth();
+            const year = currentMonth.getFullYear();
+            const diasNoMes = new Date(year, month + 1, 0).getDate();
+            const dadosDiarios = new Array(diasNoMes).fill(0);
 
-    // ===== TOGGLE VISIBILIDADE DAS DESPESAS =====
+            for (let weekKey in store.semanas) {
+                const sem = store.semanas[weekKey];
+                const weekDate = parseDateFromInput(weekKey);
+                if (!weekDate) continue;
+                if (weekDate.getMonth() !== month || weekDate.getFullYear() !== year) continue;
+
+                if (sem.receitas) {
+                    for (let i = 0; i < 7; i++) {
+                        const diaSemana = weekDate.getDate() + i;
+                        if (diaSemana <= diasNoMes) {
+                            dadosDiarios[diaSemana - 1] += sem.receitas[i] || 0;
+                        }
+                    }
+                }
+            }
+
+            const labels = Array.from({length: diasNoMes}, (_, i) => `${i+1}`);
+            
+            if (monthlyChart) monthlyChart.destroy();
+            
+            const ctx = document.getElementById('monthlyChart')?.getContext('2d');
+            if (!ctx) return;
+            monthlyChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Faturamento Diário (R$)',
+                        data: dadosDiarios,
+                        backgroundColor: '#8b5cf6',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        } catch (e) {
+            console.error('Erro em atualizarGraficoMensal:', e);
+        }
+    }
+
+    function atualizarGraficos() {
+        try {
+            let sem = getCurrentWeekData();
+            let receitas = sem.receitas || [0,0,0,0,0,0,0];
+            let despCarro = (sem.carro || []).reduce((a,b) => a+b.valor, 0);
+            let despPess = (sem.pessoal || []).reduce((a,b) => a+b.valor, 0);
+            if (weeklyChart) weeklyChart.destroy();
+            if (expenseChart) expenseChart.destroy();
+
+            const weeklyCtx = document.getElementById('weeklyChart')?.getContext('2d');
+            if (weeklyCtx) {
+                weeklyChart = new Chart(weeklyCtx, {
+                    type: 'bar',
+                    data: { labels: DIAS, datasets: [{ label: 'Faturamento Diário (R$)', data: receitas, backgroundColor: '#2b9c7c', borderRadius: 8 }] },
+                    options: { responsive: true, maintainAspectRatio: true }
+                });
+            }
+
+            const expenseCtx = document.getElementById('expenseChart')?.getContext('2d');
+            if (expenseCtx) {
+                expenseChart = new Chart(expenseCtx, {
+                    type: 'doughnut',
+                    data: { labels: ['Despesas Carro', 'Despesas Pessoais'], datasets: [{ data: [despCarro, despPess], backgroundColor: ['#2b9c7c', '#8b5cf6'], borderRadius: 8 }] },
+                    options: { responsive: true }
+                });
+            }
+
+            if (document.getElementById('tab-summary')?.classList.contains('active')) {
+                atualizarGraficoMensal();
+            }
+        } catch (e) {
+            console.error('Erro em atualizarGraficos:', e);
+        }
+    }
+
     function toggleDespesasVisibility() {
         despesasVisivel = !despesasVisivel;
         const valorTotalEl = document.getElementById('totalDespesas');
@@ -2852,17 +3181,15 @@
         const btnEl = document.getElementById('toggleDespesasBtn');
         
         if (despesasVisivel) {
-            valorTotalEl.classList.remove('hidden-value');
-            valorCarroEl.classList.remove('hidden-value');
-            valorPessoalEl.classList.remove('hidden-value');
-            btnEl.innerHTML = '🙈';
-            btnEl.title = 'Esconder valores';
+            if (valorTotalEl) valorTotalEl.classList.remove('hidden-value');
+            if (valorCarroEl) valorCarroEl.classList.remove('hidden-value');
+            if (valorPessoalEl) valorPessoalEl.classList.remove('hidden-value');
+            if (btnEl) { btnEl.innerHTML = '🙈'; btnEl.title = 'Esconder valores'; }
         } else {
-            valorTotalEl.classList.add('hidden-value');
-            valorCarroEl.classList.add('hidden-value');
-            valorPessoalEl.classList.add('hidden-value');
-            btnEl.innerHTML = '👁️';
-            btnEl.title = 'Mostrar valores';
+            if (valorTotalEl) valorTotalEl.classList.add('hidden-value');
+            if (valorCarroEl) valorCarroEl.classList.add('hidden-value');
+            if (valorPessoalEl) valorPessoalEl.classList.add('hidden-value');
+            if (btnEl) { btnEl.innerHTML = '👁️'; btnEl.title = 'Mostrar valores'; }
         }
     }
 
@@ -2876,119 +3203,134 @@
         let meta = sem.meta !== null ? sem.meta : desp;
         if (sem.meta === null && desp > 0) meta = desp;
         
-        document.getElementById('totalDespesas').innerHTML = `R$ ${desp.toFixed(2)}`;
-        document.getElementById('breakdownCarro').innerHTML = `R$ ${despCarro.toFixed(2)}`;
-        document.getElementById('breakdownPessoal').innerHTML = `R$ ${despPessoal.toFixed(2)}`;
+        const totalEl = document.getElementById('totalDespesas');
+        const carroEl = document.getElementById('breakdownCarro');
+        const pessoalEl = document.getElementById('breakdownPessoal');
+        const metaEl = document.getElementById('metaMinima');
+        const fatEl = document.getElementById('faturamentoReal');
+        const liqEl = document.getElementById('faturamentoLiquido');
+        const metaStatusEl = document.getElementById('metaStatus');
+        const fatStatusEl = document.getElementById('faturamentoStatus');
+        const lucroStatusEl = document.getElementById('lucroStatus');
+
+        if (totalEl) totalEl.innerHTML = `R$ ${desp.toFixed(2)}`;
+        if (carroEl) carroEl.innerHTML = `R$ ${despCarro.toFixed(2)}`;
+        if (pessoalEl) pessoalEl.innerHTML = `R$ ${despPessoal.toFixed(2)}`;
         
-        // Mantém o estado de visibilidade
         if (!despesasVisivel) {
-            document.getElementById('totalDespesas').classList.add('hidden-value');
-            document.getElementById('breakdownCarro').classList.add('hidden-value');
-            document.getElementById('breakdownPessoal').classList.add('hidden-value');
+            if (totalEl) totalEl.classList.add('hidden-value');
+            if (carroEl) carroEl.classList.add('hidden-value');
+            if (pessoalEl) pessoalEl.classList.add('hidden-value');
         }
         
-        document.getElementById('metaMinima').innerHTML = `R$ ${meta.toFixed(2)}`;
-        document.getElementById('faturamentoReal').innerHTML = `R$ ${rec.toFixed(2)}`;
-        document.getElementById('faturamentoLiquido').innerHTML = `R$ ${liq.toFixed(2)}`;
-        document.getElementById('metaStatus').innerHTML = sem.meta === null ? '⚙️ Definir Meta' : `🎯 R$ ${meta.toFixed(2)}`;
-        let fatDiv = document.getElementById('faturamentoStatus');
-        if (rec >= meta && meta > 0) fatDiv.innerHTML = '✅ META ALCANÇADA!';
-        else if (rec > 0 && rec < meta) fatDiv.innerHTML = `⚠️ Faltam R$ ${(meta-rec).toFixed(2)}`;
-        else fatDiv.innerHTML = '💰 Informe o faturamento';
-        document.getElementById('lucroStatus').innerHTML = liq >= 0 ? `✅ Lucro R$ ${liq.toFixed(2)}` : `⚠️ Prejuízo R$ ${Math.abs(liq).toFixed(2)}`;
+        if (metaEl) metaEl.innerHTML = `R$ ${meta.toFixed(2)}`;
+        if (fatEl) fatEl.innerHTML = `R$ ${rec.toFixed(2)}`;
+        if (liqEl) liqEl.innerHTML = `R$ ${liq.toFixed(2)}`;
+        if (metaStatusEl) metaStatusEl.innerHTML = sem.meta === null ? '⚙️ Definir Meta' : `🎯 R$ ${meta.toFixed(2)}`;
+        if (fatStatusEl) {
+            if (rec >= meta && meta > 0) fatStatusEl.innerHTML = '✅ META ALCANÇADA!';
+            else if (rec > 0 && rec < meta) fatStatusEl.innerHTML = `⚠️ Faltam R$ ${(meta-rec).toFixed(2)}`;
+            else fatStatusEl.innerHTML = '💰 Informe o faturamento';
+        }
+        if (lucroStatusEl) {
+            lucroStatusEl.innerHTML = liq >= 0 ? `✅ Lucro R$ ${liq.toFixed(2)}` : `⚠️ Prejuízo R$ ${Math.abs(liq).toFixed(2)}`;
+        }
     }
 
     function atualizarEstatisticas() {
-        document.getElementById('mediaBrutaDiaria').innerHTML = `R$ ${mediaBrutaDiaria().toFixed(2)}`;
-        document.getElementById('mediaLiquidaDiaria').innerHTML = `R$ ${mediaLiquidaDiaria().toFixed(2)}`;
-        document.getElementById('minimoDiario').innerHTML = `R$ ${minimoDiario().toFixed(2)}`;
+        const mediaBruta = document.getElementById('mediaBrutaDiaria');
+        const mediaLiquida = document.getElementById('mediaLiquidaDiaria');
+        const minimo = document.getElementById('minimoDiario');
+        const porKm = document.getElementById('mediaPorKmBruta');
+        const totalKm = document.getElementById('totalKm');
+        const totalViag = document.getElementById('totalViagens');
+        const mediaViag = document.getElementById('mediaViagensDiaria');
+        const progressFill = document.getElementById('metaProgressFill');
+        const progressPerc = document.getElementById('progressPercentage');
+
+        if (mediaBruta) mediaBruta.innerHTML = `R$ ${mediaBrutaDiaria().toFixed(2)}`;
+        if (mediaLiquida) mediaLiquida.innerHTML = `R$ ${mediaLiquidaDiaria().toFixed(2)}`;
+        if (minimo) minimo.innerHTML = `R$ ${minimoDiario().toFixed(2)}`;
         const rKm = mediaPorKm();
-        document.getElementById('mediaPorKmBruta').innerHTML = `R$ ${rKm.toFixed(2)}`;
-        document.getElementById('totalKm').innerHTML = `${totalKms().toFixed(1)} km`;
-        document.getElementById('totalViagens').innerHTML = `${totalViagens()}`;
-        document.getElementById('mediaViagensDiaria').innerHTML = `${mediaViagensDiaria().toFixed(1)}`;
+        if (porKm) porKm.innerHTML = `R$ ${rKm.toFixed(2)}`;
+        if (totalKm) totalKm.innerHTML = `${totalKms().toFixed(1)} km`;
+        if (totalViag) totalViag.innerHTML = `${totalViagens()}`;
+        if (mediaViag) mediaViag.innerHTML = `${mediaViagensDiaria().toFixed(1)}`;
         let meta = getCurrentWeekData().meta !== null ? getCurrentWeekData().meta : totalDespesas();
         let perc = meta > 0 ? Math.min(100, (totalReceitas()/meta)*100) : 0;
-        const metaProgressFill = document.getElementById('metaProgressFill');
-        const progressPercentage = document.getElementById('progressPercentage');
-        if (metaProgressFill) { metaProgressFill.style.width = `${perc}%`; }
-        if (progressPercentage) { progressPercentage.innerHTML = `${perc.toFixed(1)}%`; }
-    }
-
-    function atualizarGraficos() {
-        let sem = getCurrentWeekData();
-        let receitas = sem.receitas || [0,0,0,0,0,0,0];
-        let despCarro = (sem.carro || []).reduce((a,b) => a+b.valor, 0);
-        let despPess = (sem.pessoal || []).reduce((a,b) => a+b.valor, 0);
-        if (weeklyChart) weeklyChart.destroy();
-        if (expenseChart) expenseChart.destroy();
-        weeklyChart = new Chart(document.getElementById('weeklyChart'), {
-            type: 'bar',
-            data: { labels: DIAS, datasets: [{ label: 'Faturamento Diário (R$)', data: receitas, backgroundColor: '#2b9c7c', borderRadius: 8 }] },
-            options: { responsive: true, maintainAspectRatio: true }
-        });
-        expenseChart = new Chart(document.getElementById('expenseChart'), {
-            type: 'doughnut',
-            data: { labels: ['Despesas Carro', 'Despesas Pessoais'], datasets: [{ data: [despCarro, despPess], backgroundColor: ['#2b9c7c', '#8b5cf6'], borderRadius: 8 }] },
-            options: { responsive: true }
-        });
+        if (progressFill) progressFill.style.width = `${perc}%`;
+        if (progressPerc) progressPerc.innerHTML = `${perc.toFixed(1)}%`;
     }
 
     function atualizarLembretes() {
-        let hoje = getCurrentDateSP();
-        hoje.setHours(0,0,0,0);
-        let lemb = [];
-        for (let key in store.semanas) {
-            let sem = store.semanas[key];
-            if (sem.carro) sem.carro.forEach(e => {
-                if (e.status !== 'paid') {
-                    let msg='', cls='';
-                    if (e.dataVenc) {
-                        let v = parseDateFromInput(e.dataVenc);
-                        if (v) {
-                            v.setHours(0,0,0,0);
-                            let diff = Math.ceil((v - hoje) / (1000*3600*24));
-                            if (e.status === 'overdue') { msg = '⚠️ ATRASADA!'; cls = 'danger'; }
-                            else if (diff === 0) { msg = '🔥 VENCE HOJE!'; cls = 'danger'; }
-                            else if (diff === 1) { msg = '⚠️ Vence amanhã!'; cls = 'warning'; }
-                            else if (diff <= 5) { msg = `📅 Vence em ${diff} dias`; cls = 'warning'; }
-                            else msg = '📅 A vencer';
-                        } else msg = 'Data inválida';
-                    } else msg = 'Sem data';
-                    lemb.push({ nome: e.nome || e.categoria || 'Despesa', valor: e.valor, data: e.dataVenc, msg, cls });
-                }
-            });
-            if (sem.pessoal) sem.pessoal.forEach(e => {
-                if (e.status !== 'paid') {
-                    let msg='', cls='';
-                    if (e.dataVenc) {
-                        let v = parseDateFromInput(e.dataVenc);
-                        if (v) {
-                            v.setHours(0,0,0,0);
-                            let diff = Math.ceil((v - hoje) / (1000*3600*24));
-                            if (e.status === 'overdue') { msg = '⚠️ ATRASADA!'; cls = 'danger'; }
-                            else if (diff === 0) { msg = '🔥 VENCE HOJE!'; cls = 'danger'; }
-                            else if (diff === 1) { msg = '⚠️ Vence amanhã!'; cls = 'warning'; }
-                            else if (diff <= 5) { msg = `📅 Vence em ${diff} dias`; cls = 'warning'; }
-                            else msg = '📅 A vencer';
-                        } else msg = 'Data inválida';
-                    } else msg = 'Sem data';
-                    lemb.push({ nome: e.nome || e.categoria || 'Despesa', valor: e.valor, data: e.dataVenc, msg, cls });
-                }
-            });
+        try {
+            let hoje = getCurrentDateSP();
+            hoje.setHours(0,0,0,0);
+            let lemb = [];
+            for (let key in store.semanas) {
+                let sem = store.semanas[key];
+                if (sem.carro) sem.carro.forEach(e => {
+                    if (e.status !== 'paid') {
+                        let msg='', cls='';
+                        if (e.dataVenc) {
+                            let v = parseDateFromInput(e.dataVenc);
+                            if (v) {
+                                v.setHours(0,0,0,0);
+                                let diff = Math.ceil((v - hoje) / (1000*3600*24));
+                                if (e.status === 'overdue') { msg = '⚠️ ATRASADA!'; cls = 'danger'; }
+                                else if (diff === 0) { msg = '🔥 VENCE HOJE!'; cls = 'danger'; }
+                                else if (diff === 1) { msg = '⚠️ Vence amanhã!'; cls = 'warning'; }
+                                else if (diff <= 5) { msg = `📅 Vence em ${diff} dias`; cls = 'warning'; }
+                                else msg = '📅 A vencer';
+                            } else msg = 'Data inválida';
+                        } else msg = 'Sem data';
+                        lemb.push({ nome: e.nome || e.categoria || 'Despesa', valor: e.valor, data: e.dataVenc, msg, cls });
+                    }
+                });
+                if (sem.pessoal) sem.pessoal.forEach(e => {
+                    if (e.status !== 'paid') {
+                        let msg='', cls='';
+                        if (e.dataVenc) {
+                            let v = parseDateFromInput(e.dataVenc);
+                            if (v) {
+                                v.setHours(0,0,0,0);
+                                let diff = Math.ceil((v - hoje) / (1000*3600*24));
+                                if (e.status === 'overdue') { msg = '⚠️ ATRASADA!'; cls = 'danger'; }
+                                else if (diff === 0) { msg = '🔥 VENCE HOJE!'; cls = 'danger'; }
+                                else if (diff === 1) { msg = '⚠️ Vence amanhã!'; cls = 'warning'; }
+                                else if (diff <= 5) { msg = `📅 Vence em ${diff} dias`; cls = 'warning'; }
+                                else msg = '📅 A vencer';
+                            } else msg = 'Data inválida';
+                        } else msg = 'Sem data';
+                        lemb.push({ nome: e.nome || e.categoria || 'Despesa', valor: e.valor, data: e.dataVenc, msg, cls });
+                    }
+                });
+            }
+            let container = document.getElementById('reminderList');
+            if (!container) return;
+            if (lemb.length === 0) container.innerHTML = '<div class="empty-msg">🎉 Nenhuma conta pendente! ✅</div>';
+            else container.innerHTML = lemb.map(r =>
+                `<div class="reminder-item" style="border-left-color:${r.cls === 'danger' ? '#ef4444' : '#f59e0b'}">
+                    <strong>${escapeHtml(r.nome)}</strong><br>💰 R$ ${r.valor.toFixed(2)}<br>
+                    <small>📅 ${r.data ? parseDateFromInput(r.data)?.toLocaleDateString('pt-BR') : 'Sem data'}</small>
+                    <div style="margin-top:6px;font-weight:bold;color:${r.cls === 'danger' ? '#ef4444' : '#f59e0b'}">${r.msg}</div>
+                </div>`
+            ).join('');
+        } catch (e) {
+            console.error('Erro em atualizarLembretes:', e);
         }
-        let container = document.getElementById('reminderList');
-        if (lemb.length === 0) container.innerHTML = '<div class="empty-msg">🎉 Nenhuma conta pendente! ✅</div>';
-        else container.innerHTML = lemb.map(r =>
-            `<div class="reminder-item" style="border-left-color:${r.cls === 'danger' ? '#ef4444' : '#f59e0b'}">
-                <strong>${escapeHtml(r.nome)}</strong><br>💰 R$ ${r.valor.toFixed(2)}<br>
-                <small>📅 ${r.data ? parseDateFromInput(r.data)?.toLocaleDateString('pt-BR') : 'Sem data'}</small>
-                <div style="margin-top:6px;font-weight:bold;color:${r.cls === 'danger' ? '#ef4444' : '#f59e0b'}">${r.msg}</div>
-            </div>`
-        ).join('');
     }
 
-    function gerarCodigoBackup() { return btoa(encodeURIComponent(JSON.stringify(store))); }
+    function gerarCodigoBackup() {
+        try {
+            const json = JSON.stringify(store);
+            return btoa(encodeURIComponent(json));
+        } catch (e) {
+            alert('Erro: O backup é muito grande para ser convertido em código.\nTente exportar o arquivo JSON completo ou remova comprovantes de imagem.');
+            return null;
+        }
+    }
+
     function restaurarDoCodigo(cod) {
         try {
             let imp = JSON.parse(decodeURIComponent(atob(cod)));
@@ -3023,20 +3365,70 @@
         }
     }
 
+    function mudarSemana(delta) {
+        salvarReceitasKMsSilencioso();
+        let nova = new Date(currentWeek);
+        nova.setDate(currentWeek.getDate() + (delta*7));
+        currentWeek = getMondayOfWeek(nova);
+        atualizarTudo();
+    }
+
+    function irParaHoje() {
+        salvarReceitasKMsSilencioso();
+        currentWeek = getMondayOfWeek(getCurrentDateSP());
+        atualizarTudo();
+        toast('Semana atual carregada');
+    }
+
+    function sugerirMeta() {
+        let media = mediaBrutaDiaria();
+        if (media === 0) toast('Preencha ao menos um dia de faturamento', true);
+        else { getCurrentWeekData().meta = Math.ceil(media * 7); salvar(); atualizarTudo(); toast(`Meta sugerida: R$ ${(media*7).toFixed(2)}`); }
+    }
+
+    function aplicarTema(tema) {
+        if (tema === 'dark') {
+            document.body.classList.add('dark');
+            const btn = document.getElementById('themeToggleBtn');
+            if (btn) btn.innerHTML = '☀️ Claro';
+        } else {
+            document.body.classList.remove('dark');
+            const btn = document.getElementById('themeToggleBtn');
+            if (btn) btn.innerHTML = '🌙 Escuro';
+        }
+    }
+
+    function closeModal(modalId) { 
+        const modal = document.getElementById(modalId);
+        if (modal) modal.classList.remove('show'); 
+    }
+
+    function openModal(modalId) { 
+        const modal = document.getElementById(modalId);
+        if (modal) modal.classList.add('show'); 
+    }
+
     function atualizarTudo() {
-        atualizarListasDespesas();
-        atualizarCards();
-        atualizarEstatisticas();
-        atualizarInputsDiarios();
-        const startDate = currentWeek;
-        const endDate = new Date(currentWeek.getTime() + 6*86400000);
-        document.getElementById('weekRangeTitle').innerHTML = `📅 ${startDate.toLocaleDateString('pt-BR')} - ${endDate.toLocaleDateString('pt-BR')}`;
-        atualizarGraficos();
-        atualizarLembretes();
-        atualizarBotaoLembrete();
-        atualizarResumoMensal();
-        atualizarSaldoMensal();
-        adicionarEventoEnterNosCampos();
+        try {
+            atualizarListasDespesas();
+            atualizarCards();
+            atualizarEstatisticas();
+            atualizarInputsDiarios();
+            const startDate = currentWeek;
+            const endDate = new Date(currentWeek.getTime() + 6*86400000);
+            const titleEl = document.getElementById('weekRangeTitle');
+            if (titleEl) {
+                titleEl.innerHTML = `📅 ${startDate.toLocaleDateString('pt-BR')} - ${endDate.toLocaleDateString('pt-BR')}`;
+            }
+            atualizarGraficos();
+            atualizarLembretes();
+            atualizarBotaoLembrete();
+            atualizarResumoMensal();
+            atualizarSaldoMensal();
+            adicionarEventoEnterNosCampos();
+        } catch (e) {
+            console.error('Erro em atualizarTudo:', e);
+        }
     }
 
     function adicionarEventoEnterNosCampos() {
@@ -3050,92 +3442,18 @@
                 });
                 inputEl.addEventListener('input', () => {
                     const msgDiv = document.getElementById('dailyValidationMsg');
-                    if (msgDiv.style.display === 'block') msgDiv.style.display = 'none';
+                    if (msgDiv && msgDiv.style.display === 'block') msgDiv.style.display = 'none';
+                    marcarFaturamentoAlterado();
                 });
             }
         });
-    }
-
-    window.abrirReceitaModal = function(tipo, idx) {
-        currentReceiptData = { type: tipo, index: idx };
-        let sem = getCurrentWeekData();
-        let arr = tipo === 'carro' ? sem.carro : sem.pessoal;
-        let exp = arr[idx];
-        if (!exp) return;
-        document.getElementById('receiptInfo').innerHTML = `<strong>${escapeHtml(exp.nome || exp.categoria || 'Despesa')}</strong><br>Valor: R$ ${exp.valor.toFixed(2)}`;
-        let preview = document.getElementById('receiptPreview');
-        if (exp.receipt) preview.innerHTML = `<img src="${exp.receipt}" style="max-width:100%;border-radius:12px;"><br><small>Clique em Remover</small>`;
-        else preview.innerHTML = '<small>Nenhum comprovante anexado</small>';
-        document.getElementById('receiptModal').classList.add('show');
-    };
-
-    function mudarSemana(delta) {
-        salvarReceitasKMsSilencioso();
-        let nova = new Date(currentWeek);
-        nova.setDate(currentWeek.getDate() + (delta*7));
-        currentWeek = getMondayOfWeek(nova);
-        atualizarTudo();
-    }
-    function irParaHoje() {
-        salvarReceitasKMsSilencioso();
-        currentWeek = getMondayOfWeek(getCurrentDateSP());
-        atualizarTudo();
-        toast('Semana atual carregada');
-    }
-
-    function sugerirMeta() {
-        let media = mediaBrutaDiaria();
-        if (media === 0) toast('Preencha ao menos um dia de faturamento', true);
-        else { getCurrentWeekData().meta = Math.ceil(media * 7); salvar(); atualizarTudo(); toast(`Meta sugerida: R$ ${(media*7).toFixed(2)}`); }
-    }
-    function aplicarTema(tema) {
-        if (tema === 'dark') {
-            document.body.classList.add('dark');
-            document.getElementById('themeToggleBtn').innerHTML = '☀️ Claro';
-        } else {
-            document.body.classList.remove('dark');
-            document.getElementById('themeToggleBtn').innerHTML = '🌙 Escuro';
-        }
-    }
-    function closeModal(modalId) { 
-        const modal = document.getElementById(modalId);
-        if (modal) modal.classList.remove('show'); 
-    }
-    function openModal(modalId) { 
-        const modal = document.getElementById(modalId);
-        if (modal) modal.classList.add('show'); 
-    }
-
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            salvarReceitasKMsSilencioso();
-            
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            const target = document.getElementById(this.dataset.tab);
-            if (target) target.classList.add('active');
-            
-            if (this.dataset.tab === 'tab-summary') {
-                atualizarResumoMensal();
-                atualizarSaldoMensal();
-            }
-        });
-    });
-
-    function safeAddListener(id, event, handler) {
-        const el = document.getElementById(id);
-        if (el) {
-            el.addEventListener(event, handler);
-        } else {
-            console.warn(`Elemento #${id} não encontrado`);
-        }
     }
 
     function mudarMes(delta) {
         currentMonth.setMonth(currentMonth.getMonth() + delta);
         atualizarResumoMensal();
         atualizarSaldoMensal();
+        atualizarGraficoMensal();
     }
 
     function irParaMesAtual() {
@@ -3143,6 +3461,7 @@
         currentMonth.setDate(1);
         atualizarResumoMensal();
         atualizarSaldoMensal();
+        atualizarGraficoMensal();
         toast('Mês atual carregado');
     }
 
@@ -3207,157 +3526,253 @@
     }
     createParticles();
 
-    // DOM READY
-    document.addEventListener('DOMContentLoaded', function() {
-        renderizarInputsDiarios();
-        carregar();
-        atualizarTudo();
-
-        safeAddListener('toggleDespesasBtn', 'click', toggleDespesasVisibility);
-
-        safeAddListener('addCarExpenseBtn', 'click', adicionarDespesaCarro);
-        safeAddListener('addPersonalExpenseBtn', 'click', adicionarDespesaPessoal);
-        safeAddListener('prevWeekBtn', 'click', () => mudarSemana(-1));
-        safeAddListener('nextWeekBtn', 'click', () => mudarSemana(1));
-        safeAddListener('currentWeekBtn', 'click', irParaHoje);
-        safeAddListener('saveDailyRevenueBtn', 'click', salvarReceitasKMs);
-        safeAddListener('resetWeekBtn', 'click', resetarSemana);
-        safeAddListener('suggestRevenueBtn', 'click', sugerirMeta);
-
-        safeAddListener('prevMonthBtn', 'click', () => mudarMes(-1));
-        safeAddListener('nextMonthBtn', 'click', () => mudarMes(1));
-        safeAddListener('currentMonthBtn', 'click', irParaMesAtual);
-
-        safeAddListener('backupCodeBtn', 'click', () => {
-            openModal('backupModal');
-            document.getElementById('codeContainer').style.display = 'block';
-            document.getElementById('backupCodeDisplay').innerText = gerarCodigoBackup();
-        });
-        safeAddListener('exportDataBtn', 'click', () => {
-            let a = document.createElement('a');
-            a.href = URL.createObjectURL(new Blob([JSON.stringify(store)], {type:'application/json'}));
-            a.download = `backup_${getCurrentDateSPString()}.json`;
-            a.click();
-            toast('Exportado!');
-        });
-        safeAddListener('importDataBtn', 'click', () => {
-            let inp = document.createElement('input');
-            inp.type = 'file';
-            inp.accept = 'application/json';
-            inp.onchange = e => {
-                let file = e.target.files[0];
-                let fr = new FileReader();
-                fr.onload = ev => {
-                    try {
-                        let imp = JSON.parse(ev.target.result);
-                        if (imp.semanas) { 
-                            store = imp; 
-                            atualizarStatusContas(); 
-                            salvar(); 
-                            atualizarTudo(); 
-                            toast('Importado!'); 
-                        } else toast('Inválido', true);
-                    } catch (err) { 
-                        toast('Erro ao importar', true); 
-                    }
-                };
-                fr.readAsText(file);
-            };
-            inp.click();
-        });
-        safeAddListener('themeToggleBtn', 'click', () => {
-            store.tema = store.tema === 'light' ? 'dark' : 'light';
-            aplicarTema(store.tema);
-            salvar();
-        });
-        safeAddListener('metaCard', 'click', () => {
-            let meta = parseFloat(prompt('Meta semanal (R$):', totalDespesas()));
-            if (!isNaN(meta) && meta >= 0) { 
-                getCurrentWeekData().meta = meta; 
-                salvar(); 
-                atualizarTudo(); 
-                toast(`Meta definida: R$ ${meta.toFixed(2)}`); 
-            }
-        });
-        safeAddListener('reminderBtn', 'click', () => { 
-            atualizarLembretes(); 
-            openModal('reminderModal'); 
-        });
-        safeAddListener('backupSyncBtn', 'click', () => openModal('backupModal'));
-        safeAddListener('helpBtn', 'click', () => openModal('helpModal'));
-
-        safeAddListener('closeInstallModal', 'click', () => closeModal('installModal'));
-        safeAddListener('closeHelpModal', 'click', () => closeModal('helpModal'));
-        safeAddListener('closeBackupModal', 'click', () => closeModal('backupModal'));
-        safeAddListener('closeReminderModal', 'click', () => closeModal('reminderModal'));
-        safeAddListener('closeReceiptModal', 'click', () => closeModal('receiptModal'));
-
-        safeAddListener('modalExportBtn', 'click', () => {
-            let a = document.createElement('a');
-            a.href = URL.createObjectURL(new Blob([JSON.stringify(store)], {type:'application/json'}));
-            a.download = `backup_${getCurrentDateSPString()}.json`;
-            a.click();
-            toast('Exportado!');
-            closeModal('backupModal');
-        });
-        safeAddListener('modalGenerateCodeBtn', 'click', () => {
-            document.getElementById('codeContainer').style.display = 'block';
-            document.getElementById('backupCodeDisplay').innerText = gerarCodigoBackup();
-        });
-        safeAddListener('restoreFromCodeBtn', 'click', () => {
-            let cod = document.getElementById('restoreCodeInput').value;
-            if (cod && restaurarDoCodigo(cod)) closeModal('backupModal');
-        });
-        safeAddListener('copyCodeBtn', 'click', () => {
-            navigator.clipboard.writeText(document.getElementById('backupCodeDisplay').innerText);
-            toast('Código copiado!');
-        });
-
-        safeAddListener('saveReceiptBtn', 'click', function() {
-            let file = document.getElementById('receiptUpload').files[0];
-            if (file && currentReceiptData) {
-                if (!file.type.startsWith('image/')) return toast('Selecione imagem', true);
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    let sem = getCurrentWeekData();
-                    let arr = currentReceiptData.type === 'carro' ? sem.carro : sem.pessoal;
-                    if (arr && arr[currentReceiptData.index]) {
-                        arr[currentReceiptData.index].receipt = e.target.result;
-                        salvar();
-                        atualizarListasDespesas();
-                        toast('Comprovante anexado!');
-                        closeModal('receiptModal');
-                    }
-                };
-                reader.readAsDataURL(file);
-            } else toast('Selecione uma imagem', true);
-        });
-        safeAddListener('removeReceiptBtn', 'click', function() {
-            if (currentReceiptData && confirm('Remover comprovante?')) {
-                let sem = getCurrentWeekData();
-                let arr = currentReceiptData.type === 'carro' ? sem.carro : sem.pessoal;
-                if (arr && arr[currentReceiptData.index]) {
-                    delete arr[currentReceiptData.index].receipt;
-                    salvar();
-                    atualizarListasDespesas();
-                    toast('Comprovante removido');
-                    closeModal('receiptModal');
-                }
-            }
-        });
-    });
-
     setInterval(() => {
         atualizarStatusContas();
         atualizarLembretes();
         atualizarBotaoLembrete();
     }, 60000);
 
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('✅ Service Worker registrado:', reg))
-            .catch(err => console.error('❌ Service Worker erro:', err));
-    }
+    // ===== DOM READY =====
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            renderizarInputsDiarios();
+            carregar();
+            atualizarTudo();
+
+            // ===== LISTENER DAS ABAS (CORRIGIDO) =====
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    // Salvar dados antes de trocar
+                    salvarReceitasKMsSilencioso();
+                    
+                    // Remover active de todas as abas
+                    document.querySelectorAll('.tab-btn').forEach(function(b) {
+                        b.classList.remove('active');
+                    });
+                    
+                    // Adicionar active na aba clicada
+                    this.classList.add('active');
+                    
+                    // Esconder todos os conteúdos
+                    document.querySelectorAll('.tab-content').forEach(function(t) {
+                        t.classList.remove('active');
+                    });
+                    
+                    // Mostrar o conteúdo correspondente
+                    const targetId = this.getAttribute('data-tab');
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        target.classList.add('active');
+                    }
+                    
+                    // Atualizar gráficos se for a aba Resumo
+                    if (targetId === 'tab-summary') {
+                        atualizarResumoMensal();
+                        atualizarSaldoMensal();
+                        atualizarGraficoMensal();
+                    }
+                });
+            });
+
+            const addListener = (id, event, handler) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener(event, handler);
+                } else {
+                    console.warn(`Elemento #${id} não encontrado`);
+                }
+            };
+
+            // Botões principais
+            addListener('toggleDespesasBtn', 'click', toggleDespesasVisibility);
+            addListener('addCarExpenseBtn', 'click', adicionarDespesaCarro);
+            addListener('addPersonalExpenseBtn', 'click', adicionarDespesaPessoal);
+            addListener('prevWeekBtn', 'click', () => mudarSemana(-1));
+            addListener('nextWeekBtn', 'click', () => mudarSemana(1));
+            addListener('currentWeekBtn', 'click', irParaHoje);
+            addListener('saveDailyRevenueBtn', 'click', salvarReceitasKMs);
+            addListener('resetWeekBtn', 'click', resetarSemana);
+            addListener('suggestRevenueBtn', 'click', sugerirMeta);
+
+            // Navegação mensal
+            addListener('prevMonthBtn', 'click', () => mudarMes(-1));
+            addListener('nextMonthBtn', 'click', () => mudarMes(1));
+            addListener('currentMonthBtn', 'click', irParaMesAtual);
+
+            // Backup
+            addListener('backupCodeBtn', 'click', () => {
+                openModal('backupModal');
+                const codigo = gerarCodigoBackup();
+                const codeContainer = document.getElementById('codeContainer');
+                const codeDisplay = document.getElementById('backupCodeDisplay');
+                if (codigo && codeContainer && codeDisplay) {
+                    codeContainer.style.display = 'block';
+                    codeDisplay.innerText = codigo;
+                } else if (codeContainer) {
+                    codeContainer.style.display = 'none';
+                }
+            });
+            addListener('exportDataBtn', 'click', () => {
+                let a = document.createElement('a');
+                a.href = URL.createObjectURL(new Blob([JSON.stringify(store)], {type:'application/json'}));
+                a.download = `backup_${getCurrentDateSPString()}.json`;
+                a.click();
+                toast('Exportado!');
+            });
+            addListener('importDataBtn', 'click', () => {
+                let inp = document.createElement('input');
+                inp.type = 'file';
+                inp.accept = 'application/json';
+                inp.onchange = e => {
+                    let file = e.target.files[0];
+                    let fr = new FileReader();
+                    fr.onload = ev => {
+                        try {
+                            let imp = JSON.parse(ev.target.result);
+                            if (imp.semanas) { 
+                                store = imp; 
+                                atualizarStatusContas(); 
+                                salvar(); 
+                                atualizarTudo(); 
+                                toast('Importado!'); 
+                            } else toast('Inválido', true);
+                        } catch (err) { 
+                            toast('Erro ao importar', true); 
+                        }
+                    };
+                    fr.readAsText(file);
+                };
+                inp.click();
+            });
+            addListener('themeToggleBtn', 'click', () => {
+                store.tema = store.tema === 'light' ? 'dark' : 'light';
+                aplicarTema(store.tema);
+                salvar();
+            });
+            addListener('metaCard', 'click', () => {
+                let meta = parseFloat(prompt('Meta semanal (R$):', totalDespesas()));
+                if (!isNaN(meta) && meta >= 0) { 
+                    getCurrentWeekData().meta = meta; 
+                    salvar(); 
+                    atualizarTudo(); 
+                    toast(`Meta definida: R$ ${meta.toFixed(2)}`); 
+                }
+            });
+            addListener('reminderBtn', 'click', () => { 
+                atualizarLembretes(); 
+                openModal('reminderModal'); 
+            });
+            addListener('backupSyncBtn', 'click', () => openModal('backupModal'));
+            addListener('helpBtn', 'click', () => openModal('helpModal'));
+
+            // Fechar modais
+            addListener('closeInstallModal', 'click', () => closeModal('installModal'));
+            addListener('closeHelpModal', 'click', () => closeModal('helpModal'));
+            addListener('closeBackupModal', 'click', () => closeModal('backupModal'));
+            addListener('closeReminderModal', 'click', () => closeModal('reminderModal'));
+            addListener('closeReceiptModal', 'click', () => closeModal('receiptModal'));
+
+            // Modal backup
+            addListener('modalExportBtn', 'click', () => {
+                let a = document.createElement('a');
+                a.href = URL.createObjectURL(new Blob([JSON.stringify(store)], {type:'application/json'}));
+                a.download = `backup_${getCurrentDateSPString()}.json`;
+                a.click();
+                toast('Exportado!');
+                closeModal('backupModal');
+            });
+            addListener('modalGenerateCodeBtn', 'click', () => {
+                const codigo = gerarCodigoBackup();
+                const codeContainer = document.getElementById('codeContainer');
+                const codeDisplay = document.getElementById('backupCodeDisplay');
+                if (codigo && codeContainer && codeDisplay) {
+                    codeContainer.style.display = 'block';
+                    codeDisplay.innerText = codigo;
+                } else if (codeContainer) {
+                    codeContainer.style.display = 'none';
+                }
+            });
+            addListener('restoreFromCodeBtn', 'click', () => {
+                const cod = document.getElementById('restoreCodeInput')?.value;
+                if (cod && restaurarDoCodigo(cod)) closeModal('backupModal');
+            });
+            addListener('copyCodeBtn', 'click', () => {
+                const texto = document.getElementById('backupCodeDisplay')?.innerText;
+                if (texto) {
+                    navigator.clipboard.writeText(texto);
+                    toast('Código copiado!');
+                }
+            });
+
+            // Comprovantes
+            addListener('saveReceiptBtn', 'click', function() {
+                let file = document.getElementById('receiptUpload').files[0];
+                if (file && currentReceiptData) {
+                    if (!file.type.startsWith('image/')) return toast('Selecione imagem', true);
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        let sem = getCurrentWeekData();
+                        let arr = currentReceiptData.type === 'carro' ? sem.carro : sem.pessoal;
+                        if (arr && arr[currentReceiptData.index]) {
+                            arr[currentReceiptData.index].receipt = e.target.result;
+                            salvar();
+                            atualizarListasDespesas();
+                            toast('Comprovante anexado!');
+                            closeModal('receiptModal');
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                } else toast('Selecione uma imagem', true);
+            });
+            addListener('removeReceiptBtn', 'click', function() {
+                if (currentReceiptData && confirm('Remover comprovante?')) {
+                    let sem = getCurrentWeekData();
+                    let arr = currentReceiptData.type === 'carro' ? sem.carro : sem.pessoal;
+                    if (arr && arr[currentReceiptData.index]) {
+                        delete arr[currentReceiptData.index].receipt;
+                        salvar();
+                        atualizarListasDespesas();
+                        toast('Comprovante removido');
+                        closeModal('receiptModal');
+                    }
+                }
+            });
+
+            // ACORDEÕES PRINCIPAIS
+            const carHeader = document.getElementById('carListHeader');
+            const personalHeader = document.getElementById('personalListHeader');
+            if (carHeader && !carHeader.hasAttribute('data-listener')) {
+                carHeader.setAttribute('data-listener', 'true');
+                carHeader.addEventListener('click', function(e) {
+                    toggleMainList('carListBody', this);
+                });
+            }
+            if (personalHeader && !personalHeader.hasAttribute('data-listener')) {
+                personalHeader.setAttribute('data-listener', 'true');
+                personalHeader.addEventListener('click', function(e) {
+                    toggleMainList('personalListBody', this);
+                });
+            }
+
+            // Instalação PWA
+            const installBtn = document.getElementById('installPwaBtn');
+            if (installBtn) {
+                installBtn.addEventListener('click', installPWA);
+            }
+
+        } catch (e) {
+            console.error('Erro no DOMContentLoaded:', e);
+            toast('Erro ao carregar o aplicativo. Verifique o console.', true);
+        }
+    });
+
+    // Captura erros não tratados
+    window.onerror = function(msg, url, line, col, error) {
+        console.error('Erro global:', msg, error);
+        toast('Ocorreu um erro inesperado. Verifique o console.', true);
+        return false;
+    };
 </script>
 </body>
 </html>
