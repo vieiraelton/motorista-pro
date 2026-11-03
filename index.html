@@ -3465,6 +3465,21 @@
         toast('Mês atual carregado');
     }
 
+    // ===== CORREÇÃO: MOSTRAR CAMPO DESCRIÇÃO QUANDO "OUTROS" =====
+    function atualizarCampoDescricao(tipo) {
+        const select = document.getElementById(tipo === 'carro' ? 'carExpenseCategory' : 'personalExpenseCategory');
+        const container = document.getElementById(tipo === 'carro' ? 'carDescContainer' : 'personalDescContainer');
+        const input = document.getElementById(tipo === 'carro' ? 'carExpenseDesc' : 'personalExpenseDesc');
+        if (select && container) {
+            if (select.value === 'Outros') {
+                container.classList.add('show');
+            } else {
+                container.classList.remove('show');
+                if (input) input.value = '';
+            }
+        }
+    }
+
     // ===== SPLASH =====
     let progress = 0;
     const splashDuration = 4000;
@@ -3539,34 +3554,28 @@
             carregar();
             atualizarTudo();
 
-            // ===== LISTENER DAS ABAS (CORRIGIDO) =====
+            // ===== LISTENER DAS ABAS =====
             const tabBtns = document.querySelectorAll('.tab-btn');
             tabBtns.forEach(function(btn) {
                 btn.addEventListener('click', function(e) {
-                    // Salvar dados antes de trocar
                     salvarReceitasKMsSilencioso();
                     
-                    // Remover active de todas as abas
                     document.querySelectorAll('.tab-btn').forEach(function(b) {
                         b.classList.remove('active');
                     });
                     
-                    // Adicionar active na aba clicada
                     this.classList.add('active');
                     
-                    // Esconder todos os conteúdos
                     document.querySelectorAll('.tab-content').forEach(function(t) {
                         t.classList.remove('active');
                     });
                     
-                    // Mostrar o conteúdo correspondente
                     const targetId = this.getAttribute('data-tab');
                     const target = document.getElementById(targetId);
                     if (target) {
                         target.classList.add('active');
                     }
                     
-                    // Atualizar gráficos se for a aba Resumo
                     if (targetId === 'tab-summary') {
                         atualizarResumoMensal();
                         atualizarSaldoMensal();
@@ -3755,6 +3764,23 @@
                 });
             }
 
+            // ===== CORREÇÃO: LISTENERS DE CATEGORIA "OUTROS" =====
+            const carCategorySelect = document.getElementById('carExpenseCategory');
+            if (carCategorySelect) {
+                carCategorySelect.addEventListener('change', function() {
+                    atualizarCampoDescricao('carro');
+                });
+            }
+            const personalCategorySelect = document.getElementById('personalExpenseCategory');
+            if (personalCategorySelect) {
+                personalCategorySelect.addEventListener('change', function() {
+                    atualizarCampoDescricao('pessoal');
+                });
+            }
+            // Garante estado inicial correto
+            atualizarCampoDescricao('carro');
+            atualizarCampoDescricao('pessoal');
+
             // Instalação PWA
             const installBtn = document.getElementById('installPwaBtn');
             if (installBtn) {
@@ -3766,6 +3792,22 @@
             toast('Erro ao carregar o aplicativo. Verifique o console.', true);
         }
     });
+
+    function installPWA() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('Instalado');
+                    const banner = document.getElementById('installBanner');
+                    if (banner) banner.classList.remove('show');
+                }
+                deferredPrompt = null;
+            });
+        } else {
+            openModal('installModal');
+        }
+    }
 
     // Captura erros não tratados
     window.onerror = function(msg, url, line, col, error) {
